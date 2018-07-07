@@ -27,13 +27,20 @@ function mytheme_admin() {
     global $themename, $options;
     $i=0;
     if ( $_REQUEST['saved'] ) echo '<div><p>'.$themename.'修改已保存</p></div>';
+	//版本检查
+	$version=file_get_contents('http://api.tongleer.com/interface/tongleer.php?action=updateWordPress&version=1');
 ?>
 <style>
 table td,th{background-color:#fff;}
 </style>
 <div>
     <h2><?php echo $themename; ?>设置
-        <span>作者：<a href="http://www.tongleer.com/" target="_blank">二呆</a></span>
+        <span>
+			<small>
+			作者：<a href="http://www.tongleer.com/" target="_blank">二呆</a><br />
+			版本检测：<?=$version;?>
+			</small>
+		</span>
     </h2>
 
 	<form method="post">
