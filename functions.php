@@ -1,0 +1,215 @@
+<?php
+
+$dname = 'tongleer';
+
+add_action( 'after_setup_theme', 'tle_setup' );
+
+include('admin/tongleer.php');
+include('widgets/index.php');
+
+function tle_setup(){
+
+}
+
+if (function_exists('register_sidebar')){
+	register_sidebar(array(
+		'name'          => '全站侧栏',
+		'id'            => 'widget_sitesidebar'
+	));
+	register_sidebar(array(
+		'name'          => '首页侧栏',
+		'id'            => 'widget_sidebar'
+	));
+	register_sidebar(array(
+		'name'          => '分类/标签/搜索页侧栏',
+		'id'            => 'widget_othersidebar'
+	));
+	register_sidebar(array(
+		'name'          => '文章页侧栏',
+		'id'            => 'widget_postsidebar'
+	));
+	register_sidebar(array(
+		'name'          => '页面侧栏',
+		'id'            => 'widget_pagesidebar'
+	));
+}
+
+/*缩略图调用*/
+function showThumb($content){
+    preg_match_all( "/<[img|IMG].*?src=[\'|\"](.*?)[\'|\"].*?[\/]?>/", $content, $matches );
+    $thumb = array();
+    if(count($matches[1])<9&&count($matches[1])!=0){
+        array_push($thumb,$matches[1][0]);//文章内容中抓到了图片 输出链接
+    }else if(count($matches[1])>=9){
+		array_push($thumb,$matches[1][0]);
+		array_push($thumb,$matches[1][1]);
+		array_push($thumb,$matches[1][2]);
+		array_push($thumb,$matches[1][3]);
+		array_push($thumb,$matches[1][4]);
+		array_push($thumb,$matches[1][5]);
+		array_push($thumb,$matches[1][6]);
+		array_push($thumb,$matches[1][7]);
+		array_push($thumb,$matches[1][8]);
+	}
+    return $thumb;
+}
+
+function timeago( $ptime ) {
+    $ptime = strtotime($ptime);
+    $etime = time() - $ptime;
+    if($etime < 1) return '刚刚';
+    $interval = array (
+        12 * 30 * 24 * 60 * 60  =>  '年前 ('.date('Y-m-d', $ptime).')',
+        30 * 24 * 60 * 60       =>  '个月前 ('.date('m-d', $ptime).')',
+        7 * 24 * 60 * 60        =>  '周前 ('.date('m-d', $ptime).')',
+        24 * 60 * 60            =>  '天前',
+        60 * 60                 =>  '小时前',
+        60                      =>  '分钟前',
+        1                       =>  '秒前'
+    );
+    foreach ($interval as $secs => $str) {
+        $d = $etime / $secs;
+        if ($d >= 1) {
+            $r = round($d);
+            return $r . $str;
+        }
+    };
+}
+
+function tle_strimwidth($str ,$start , $width ,$trimmarker ){
+    $output = preg_replace('/^(?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$start.'}((?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$width.'}).*/s','\1',$str);
+    return $output.$trimmarker;
+}
+
+if ( ! function_exists( 'tle_views' ) ){
+	function tle_record_visitors(){
+		if (is_singular()) {
+		  global $post;
+		  $post_ID = $post->ID;
+		  if($post_ID) {
+			  $post_views = (int)get_post_meta($post_ID, 'views', true);
+			  if(!update_post_meta($post_ID, 'views', ($post_views+1))) 
+			  {
+				add_post_meta($post_ID, 'views', 1, true);
+			  }
+		  }
+		}
+	}
+	add_action('wp_head', 'tle_record_visitors');
+	function tle_views($after=''){
+	  global $post;
+	  $post_ID = $post->ID;
+	  $views = (int)get_post_meta($post_ID, 'views', true);
+	  echo $views, $after;
+	}
+}
+
+if ( ! function_exists( 'tle_paging' ) ){
+	function tle_paging() {
+		$p = 4;
+		if ( is_singular() ) return;
+		global $wp_query, $paged;
+		$max_page = $wp_query->max_num_pages;
+		if ( $max_page == 1 ) return; 
+		echo '<ul class="am-pagination am-pagination-right">';
+		if ( empty( $paged ) ) $paged = 1;
+		echo '<li>'; previous_posts_link('上一页'); echo '</li>';
+
+		if ( $paged > $p + 1 ) tle_paging_link( 1, '<li>第一页</li>' );
+		if ( $paged > $p + 2 ) echo "<li><span>···</span></li>";
+		for( $i = $paged - $p; $i <= $paged + $p; $i++ ) { 
+			if ( $i > 0 && $i <= $max_page ) $i == $paged ? print "<li class=\"am-active\"><span>{$i}</span></li>" : tle_paging_link( $i );
+		}
+		if ( $paged < $max_page - $p - 1 ) echo "<li><span> ... </span></li>";
+		//if ( $paged < $max_page - $p ) tle_paging_link( $max_page, '&raquo;' );
+		echo '<li>'; next_posts_link('下一页'); echo '</li>';
+		// echo '<li><span>共 '.$max_page.' 页</span></li>';
+		echo '</ul>';
+	}
+	function tle_paging_link( $i, $title = '' ) {
+		if ( $title == '' ) $title = "第 {$i} 页";
+		echo "<li><a href='", esc_html( get_pagenum_link( $i ) ), "'>{$i}</a></li>";
+	}
+}
+
+function do_option($e){
+	return stripslashes(get_option($e));
+}
+
+/**
+ * 判断是否通过手机访问
+ */
+function isMobile(){ 
+    // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+    if (isset ($_SERVER['HTTP_X_WAP_PROFILE'])){
+        return true;
+    } 
+    // 如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+    if (isset ($_SERVER['HTTP_VIA'])){ 
+        // 找不到为flase,否则为true
+        return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
+    } 
+    // 脑残法，判断手机发送的客户端标志,兼容性有待提高
+    if (isset ($_SERVER['HTTP_USER_AGENT'])){
+        $clientkeywords = array ('nokia',
+            'sony','ericsson','mot','samsung','htc','sgh','lg','sharp','sie-','philips','panasonic','alcatel','lenovo','iphone','ipod',
+            'blackberry','meizu','android','netfront','symbian','ucweb','windowsce','palm','operamini','operamobi','openwave','nexusone','cldc','midp','wap','mobile'
+            ); 
+        // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+        if (preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT']))){
+            return true;
+        } 
+    } 
+    // 协议法，因为有可能不准确，放到最后判断
+    if (isset ($_SERVER['HTTP_ACCEPT'])){ 
+        // 如果只支持wml并且不支持html那一定是移动设备
+        // 如果支持wml和html但是wml在html之前则是移动设备
+        if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))){
+            return true;
+        } 
+    } 
+    return false;
+}
+
+//评论样式
+function tle_comment_list($comment, $args, $depth) {
+	if($comment->comment_parent==0){
+		?>
+		<li class="am-comment">
+			<a href="#link-to-user-home">
+				<?=str_replace(' src=', ' data-original=', get_avatar( $comment->comment_author_email, $size = '36'));?>
+			</a>
+			<div class="am-comment-main">
+			  <header class="am-comment-hd">
+				<div class="am-comment-meta">
+				  <?=$comment->comment_author;?><time datetime="<?=$comment->comment_date;?>" title="<?=$comment->comment_date;?>"><?=$comment->comment_date;?></time>评论
+				  <div class="am-fr">
+					<a href="javascript:;" class="replyfloor" id="replyfloor<?=get_comment_ID();?>" data-coid="<?php echo get_comment_ID(); ?>" data-author="<?=$comment->comment_author;?>" data-ccreated="<?=$comment->comment_date;?>" data-ctext="<?php echo htmlspecialchars(strip_tags($comment->comment_content)); ?>">回复</a>
+					此楼
+				  </div>
+				</div>
+			  </header>
+			  <div class="am-comment-bd">
+				<p><?=$comment->comment_content;?></p>
+				<?php
+				global $wpdb,$current_user;
+				$rows = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".get_comment_ID()." AND comment_approved='1' ORDER BY comment_date DESC");
+				foreach($rows as $value){
+				?>
+				<header class="am-comment-hd">
+					
+					<div class="am-list-item-text">
+					  <a href="#link-to-user" class="am-comment-author"><?php echo $value->comment_author; ?></a><time datetime="<?php echo $value->comment_date; ?>" title="<?php echo $value->comment_date; ?>"><?php echo $value->comment_date; ?></time>评论<p><?php echo $value->comment_content; ?></p>
+					</div>
+					
+				</header>
+				<?php
+				}
+				?>
+			  </div>
+			</div>
+		</li>
+		<?php
+	}
+}
+?>
