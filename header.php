@@ -61,7 +61,7 @@
 	<div class="am-topbar-collapse am-collapse" id="collapse-head">
 	  <ul class="am-nav am-nav-pills am-topbar-nav">
 		  <li><a href="<?php bloginfo('url'); ?>"><span class="am-icon-home"></span>首页</a></li>
-		  
+		  <?=do_option('config_nav');?>
 	  </ul>
 	  <?php 
 		if( do_option('config_login') ){ 
