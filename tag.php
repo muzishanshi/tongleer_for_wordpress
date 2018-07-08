@@ -131,7 +131,7 @@
 				<a class="am-list-item-text" href="">阅读 <?php tle_views(''); ?></a>
 			  </li>
 			  <li style="border-top:1px solid #ddd;">
-				<a class="am-list-item-text" href="<?php get_comments_link(); ?>#comments">
+				<a class="am-list-item-text" href="<?php echo get_comments_link(); ?>#comments">
 					评论 <?php if ( comments_open() ){echo get_comments_number('0', '1', '%');} ?>
 				</a>
 			  </li>
