@@ -27,7 +27,7 @@
  - 如果你喜欢这个主题，别忘记给我打赏哦：http://me.tongleer.com/qitao/index.php?payChannel=alipay
 
 # 官方演示
-http://joke.tongleer.com
+http://starmiao.tongleer.com
 
 优秀使用者可联系作者QQ:2293338477有机会加入站长大家庭，一起为了世界和平而奋斗。
 
