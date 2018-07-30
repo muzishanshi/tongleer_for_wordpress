@@ -28,7 +28,7 @@ function mytheme_admin() {
     $i=0;
     if ( $_REQUEST['saved'] ) echo '<div><p>'.$themename.'修改已保存</p></div>';
 	//版本检查
-	$version=file_get_contents('http://api.tongleer.com/interface/tongleer.php?action=updateWordPress&version=1');
+	$version=file_get_contents('http://api.tongleer.com/interface/tongleer.php?action=updateWordPress&version=2');
 ?>
 <style>
 table td,th{background-color:#fff;}
