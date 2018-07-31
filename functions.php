@@ -35,6 +35,36 @@ if (function_exists('register_sidebar')){
 }
 //找回链接功能
 add_filter( 'pre_option_link_manager_enabled', '__return_true' );
+//谷歌字体移除
+function remove_open_sans() {
+wp_deregister_style( 'open-sans' );
+wp_register_style( 'open-sans', false );
+wp_enqueue_style('open-sans','');
+}
+add_action( 'init', 'remove_open_sans' );
+//增强编辑器开始
+function add_editor_buttons($buttons) {
+$buttons[] = 'fontselect';
+$buttons[] = 'fontsizeselect';
+$buttons[] = 'cleanup';
+$buttons[] = 'styleselect';
+$buttons[] = 'hr';
+$buttons[] = 'del';
+$buttons[] = 'sub';
+$buttons[] = 'sup';
+$buttons[] = 'table';
+$buttons[] = 'copy';
+$buttons[] = 'paste';
+$buttons[] = 'cut';
+$buttons[] = 'undo';
+$buttons[] = 'image';
+$buttons[] = 'anchor';
+$buttons[] = 'backcolor';
+$buttons[] = 'wp_page';
+$buttons[] = 'charmap';
+return $buttons;
+}
+add_filter("mce_buttons_3", "add_editor_buttons");
 /*缩略图调用*/
 function showThumb($content){
 	//若单纯匹配图片把[img|IMG]修改为img即可，这里莫名的原因匹配到了iframe。
