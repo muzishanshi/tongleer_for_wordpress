@@ -6,7 +6,7 @@ $options = array(
 	"config_headBg","config_headImgUrl","config_nickname","config_follow_qrcode","config_home_name",
 	"config_home_link","config_album_name","config_album_link","config_other_1_name","config_other_1_link",
 	"config_weiboname","config_address","config_birthday","config_detail","config_foot_info",
-	"config_login"
+	"config_login","config_sex","config_about","config_is_ajax","config_is_pjax","config_is_play"
 );
 
 function mytheme_add_admin() {
@@ -28,7 +28,7 @@ function mytheme_admin() {
     $i=0;
     if ( $_REQUEST['saved'] ) echo '<div><p>'.$themename.'修改已保存</p></div>';
 	//版本检查
-	$version=file_get_contents('http://api.tongleer.com/interface/tongleer.php?action=updateWordPress&version=2');
+	$version=file_get_contents('http://api.tongleer.com/interface/tongleer.php?action=updateWordPress&version=3');
 ?>
 <style>
 table td,th{background-color:#fff;}
@@ -71,6 +71,29 @@ table td,th{background-color:#fff;}
 					</td>
 				</tr>
 				<tr>
+					<td>是否开启PJAX无刷新加载</td>
+					<td>
+						<input type="radio" id="config_is_pjax" name="config_is_pjax" value="y" <?php if(do_option('config_is_pjax')=='y'){?>checked<?php }?>>是
+						<input type="radio" id="config_is_pjax" name="config_is_pjax" value="n" <?php if(do_option('config_is_pjax')=='n'){?>checked<?php }?>>否
+						（此功能尚未完善）
+					</td>
+				</tr>
+				<tr>
+					<td>是否开启音乐播放器</td>
+					<td>
+						<input type="radio" id="config_is_play" name="config_is_play" value="y" <?php if(do_option('config_is_play')=='y'){?>checked<?php }?>>是
+						<input type="radio" id="config_is_play" name="config_is_play" value="n" <?php if(do_option('config_is_play')=='n'){?>checked<?php }?>>否
+						（此功能设置歌单需要手动修改footer.php文件）
+					</td>
+				</tr>
+				<tr>
+					<td>是否开启AJAX分页加载</td>
+					<td>
+						<input type="radio" id="config_is_ajax" name="config_is_ajax" value="y" <?php if(do_option('config_is_ajax')=='y'){?>checked<?php }?>>是
+						<input type="radio" id="config_is_ajax" name="config_is_ajax" value="n" <?php if(do_option('config_is_ajax')=='n'){?>checked<?php }?>>否
+					</td>
+				</tr>
+				<tr>
 					<td>顶部导航链接</td>
 					<td>
 						<?php
@@ -110,6 +133,13 @@ table td,th{background-color:#fff;}
 					<td>昵称</td>
 					<td>
 						<input type="text" id="config_nickname" name="config_nickname" value="<?=do_option('config_nickname');?>">
+					</td>
+				</tr>
+				<tr>
+					<td>性别</td>
+					<td>
+						<input type="radio" id="config_sex" name="config_sex" value="boy" <?php if(do_option('config_sex')=='boy'){?>checked<?php }?>>男
+						<input type="radio" id="config_sex" name="config_sex" value="girl" <?php if(do_option('config_sex')=='girl'){?>checked<?php }?>>女
 					</td>
 				</tr>
 				<tr>
@@ -184,14 +214,14 @@ table td,th{background-color:#fff;}
 					</td>
 				</tr>
 				<tr>
+					<td>更多资料</td>
+					<td>
+						<input type="text" id="config_about" name="config_about" value="<?=do_option('config_about');?>">
+					</td>
+				</tr>
+				<tr>
 					<td>底部信息</td>
 					<td>
-						<?php
-						$config_foot_info=do_option('config_foot_info');
-						if($config_foot_info==''){
-							$config_foot_info='<p>友情链接：<a href="" target=_blank>链接1</a> <a href="" target=_blank>链接2</a></p>';
-						}
-						?>
 						<textarea name="config_foot_info" id="config_foot_info" placeholder="" rows="2" cols="100"><?=$config_foot_info;?></textarea>
 					</td>
 				</tr>

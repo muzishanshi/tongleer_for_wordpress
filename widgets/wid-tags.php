@@ -18,23 +18,23 @@ class tle_tag extends WP_Widget {
 		
 		$html='';
 		$html.='
-			<section class="am-panel am-panel-default" data-am-sticky="{top:60}">
-				<div class="am-panel-hd">标签</div>
-				<ul class="am-list blog-list">
+			<section class="am-panel am-panel-success" data-am-sticky="{top:60}">
+				<div class="am-panel-hd"><small>标签</small></div>
+					<div style="padding:10px;">
 		';
 		if ($tags_list) { 
 			foreach($tags_list as $tag) {
 				$html.='
-					<li class="am-serif"><a href="'.get_tag_link($tag).'">'. $tag->name .' ('. $tag->count .')</a></li>
+					<a style="color: rgb('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).')" href="'.get_tag_link($tag).'" title="'.$value['tagname'].'">'. $tag->name .' ('. $tag->count .')</a>
 				';
 			} 
 		}else{
 			$html.='
-				<li class="am-serif">暂无标签</li>
+				暂无标签
 			';
 		}
 		$html.='
-				</ul>
+				</div>
 			</section>
 		';
 		echo $html;

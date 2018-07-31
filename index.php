@@ -36,14 +36,14 @@
 		.cat-nav {width: 100%;}
 	}
 </style>
-<div class="am-g am-g-fixed">
+<div class="am-g am-g-fixed" style="word-wrap:break-word;">
   <div class="am-u-md-9 am-u-md-push-3">
 	<div class="cat-nav am-round" data-am-sticky="{top:60}">
 		<div data-am-widget="tabs">
 		  <ul class="am-tabs-nav">
-			  <li><button type="button" class="am-btn am-radius" onClick="location.href='<?php bloginfo('url'); ?>';">全部</button></li>
+			  <li><a class="am-btn am-radius" href="<?php bloginfo('url'); ?>"><small>全部</small></a></li>
 			  <li class="am-dropdown" data-am-dropdown>
-				<button type="button" class="am-dropdown-toggle am-btn am-radius" data-am-dropdown-toggle>更多<span class="am-icon-caret-down"></span></button>
+				<a class="am-dropdown-toggle am-btn am-radius" data-am-dropdown-toggle><small>更多</small><span class="am-icon-caret-down"></span></a>
 				<ul class="am-dropdown-content">
 					<?php
 					$categories=get_categories();
@@ -52,7 +52,7 @@
 							continue;
 						}
 						?>
-						<li><a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><?php echo $category->name;?></a></li>
+						<li><a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><small><?php echo $category->name;?></small></a></li>
 						<?php
 					}
 					?>
@@ -66,7 +66,7 @@
 		  </ul>
 		</div>
 	</div>
-    <section class="am-u-md-12">
+    <section id="content" class="am-u-md-12">
 	  <?php
 	  $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 	  $args = array(
@@ -78,9 +78,9 @@
 	  ?>
 		<ul class="am-list">
 		  <?php $k=0;while ( have_posts() ) : the_post(); ?>
-		  <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left" style="background-color:#fff;margin-bottom:10px;">
+		  <li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left tleajaxpage" style="background-color:#fff;margin-bottom:10px;">
 			<div <?php if(isMobile()){?>class="am-u-sm-3 am-list-thumb"<?php }else{?>class="am-u-sm-2 am-list-thumb"<?php }?>>
-			  <a href="">
+			  <a href="<?php if( !is_author()){echo get_author_posts_url( get_the_author_meta( 'ID' ) );} ?>">
 				<img class="am-circle" src="<?=do_option('config_headImgUrl');?>"/>
 			  </a>
 			</div>
@@ -115,37 +115,73 @@
 				</div>
 				<?php
 				$thumb=showThumb($post->post_content);
+				$youku='player.youku.com';
+				$miaopai='gslb.miaopai.com';
+				$douyin='aweme.snssdk.com';
 				if(count($thumb)<9&&count($thumb)!=0){
+					if(strpos($thumb[0],$youku)===false&&strpos($thumb[0],$miaopai)===false&&strpos($thumb[0],$douyin)===false){
 					?>
 					<div class="am-avg-sm-3" data-am-widget="gallery" data-am-gallery="{ pureview: true }">
 					  <img src="<?=$thumb[0];?>"  alt="" width="180" />
 					</div>
 					<?php
+					}else if(strpos($thumb[0],'player.youku.com')){
+						?>
+						<iframe height="400" width="100%" src="<?=$thumb[0];?>" frameborder="0" "allowfullscreen"></iframe>
+						<?php
+					}
 				}else if(count($thumb)>=9){
 					?>
 					<ul class="am-avg-sm-3 boxes" data-am-widget="gallery" data-am-gallery="{ pureview: true }">
-						<?php for($i=0;$i<count($thumb);$i++){?>
+						<?php
+						for($i=0;$i<count($thumb);$i++){
+							if(strpos($thumb[$i],$youku)===false&&strpos($thumb[$i],$miaopai)===false&&strpos($thumb[$i],$douyin)===false){
+							?>
 							<li class="box box-1"><img src="<?=$thumb[$i];?>"  alt="" /></li>
-						<?php }?>
+							<?php
+							}
+						}
+						?>
 					</ul>
 					<?php
 				}
 				?>
 			</div>
-			<ul class="am-avg-sm-2" style="text-align:center;">
+			<ul class="am-avg-sm-3" style="text-align:center;">
 			  <li style="border-right:1px solid #ddd;border-top:1px solid #ddd;">
 				<a class="am-list-item-text" href="">阅读 <?php tle_views(''); ?></a>
 			  </li>
-			  <li style="border-top:1px solid #ddd;">
+			  <li style="border-right:1px solid #ddd;border-top:1px solid #ddd;">
 				<a class="am-list-item-text" href="<?php echo get_comments_link(); ?>#comments">
 					评论 <?php if ( comments_open() ){echo get_comments_number('0', '1', '%');} ?>
 				</a>
 			  </li>
+			  <li style="border-top:1px solid #ddd;"><a class="am-list-item-text" href="http://service.weibo.com/share/share.php?url=<?php the_permalink() ?>&title=<?php the_title(); ?>" onclick="window.open(this.href, 'share', 'width=550,height=335');return false;" >分享 <span class="am-icon-share-square-o"></span></a></li>
 			</ul>
 		  </li>
 		  <?php $k++;endwhile;wp_reset_query(); ?>
 		</ul>
 		<?php tle_paging(); ?>
+		<?php if(do_option('config_is_ajax')=='y'){?>
+		<!--ajax分页加载-->
+		<script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.ias.min.js" type="text/javascript"></script>
+		<script>
+		var ias = $.ias({
+			container: "#content", /*包含所有文章的元素*/
+			item: ".tleajaxpage", /*文章元素*/
+			pagination: ".am-pagination", /*分页元素*/
+			next: ".am-pagination #tlenextpage a", /*下一页元素*/
+		});
+		ias.extension(new IASTriggerExtension({
+			text: '<div class="cat-nav am-round"><small>猛点几次查看更多内容</small></div>', /*此选项为需要点击时的文字*/
+			offset: 2, /*设置此项后，到 offset+1 页之后需要手动点击才能加载，取消此项则一直为无限加载*/
+		}));
+		ias.extension(new IASSpinnerExtension());
+		ias.extension(new IASNoneLeftExtension({
+			text: '<div class="cat-nav am-round"><small>已经是全部内容了</small></div>', /*加载完成时的提示*/
+		}));
+		</script>
+		<?php }?>
 	  <?php
 	  }else{
 	  ?>

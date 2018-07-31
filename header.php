@@ -97,8 +97,20 @@
 <!--end navigation panel -->
 <section class="banner-head" style="background-image:url('<?php if(do_option('config_headBg')){echo do_option('config_headBg');}else{echo 'http://api.tongleer.com/picturebed/img/bg.jpg';}?>')">
 	<img class="am-circle" src="<?php if(do_option('config_headImgUrl')){echo do_option('config_headImgUrl');}else{echo 'https://cambrian-images.cdn.bcebos.com/39ceafd81d6813a014e747db4aa6f0eb_1524963877208.jpeg';}?>" width="100" height="100"/><br />
-	<span><?=do_option('config_nickname');?></span><br />
-	<small><?=get_bloginfo('description');?></small>
+	<span>
+		<?=do_option('config_nickname');?>
+		<?php if(do_option('config_sex')=='boy'){echo "♂";}else{echo "♀";};?>
+	</span><br />
+	<?php
+	global $wpdb;
+	$usersnum = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->users");
+	if (0 < $usersnum) $usersnum= number_format($usersnum);
+	$linksnum = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->links");
+	if (0 < $linksnum) $linksnum= number_format($linksnum);
+	?>
+	<small>关注 <?=$linksnum;?>  |  粉丝 <?php echo $usersnum;?></small><br />
+	<small><?=get_bloginfo('description');?></small><br />
+	<small>微博认证：<?=do_option('config_weiboname');?></small>
 	<div>
 		<div class="am-dropdown" data-am-dropdown>
 		  <button class="am-btn am-btn-warning am-radius am-btn-xs am-dropdown-toggle">关注</button>
@@ -119,8 +131,8 @@
 <div class="banner-nav">
 	<div data-am-widget="tabs">
       <ul class="am-tabs-nav">
-          <li><button type="button" class="am-btn am-radius" onClick="location.href='<?php bloginfo('url'); ?>';">主页</button></li>
-		  <li><button type="button" class="am-btn am-radius" onClick="location.href='<?=do_option('config_album_link');?>';"><?php if(do_option('config_album_name')){echo do_option('config_album_name');}else{echo '相册';}?></button></li>
+          <li><a class="am-btn am-radius" href="<?php bloginfo('url'); ?>">主页</a></li>
+		  <li><a class="am-btn am-radius" target="_blank" href="<?=do_option('config_album_link');?>"><?php if(do_option('config_album_name')){echo do_option('config_album_name');}else{echo '相册';}?></a></li>
       </ul>
 	</div>
 </div>

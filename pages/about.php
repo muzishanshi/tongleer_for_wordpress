@@ -1,3 +1,9 @@
+<?php
+/*
+    template name: 更多资料
+    description: template for tongleer.com TleWeiboForWordPress theme 
+*/
+?>
 <?php get_header(); ?>
 <style>
 	a{
@@ -70,16 +76,6 @@
 		<?php while (have_posts()) : the_post(); ?>
 		<ol class="am-breadcrumb" style="background-color:#fff;">
 		  <li><a href="<?php bloginfo('url'); ?>" class="am-icon-home">首页</a></li>
-		  <li>
-			<?php 
-				if( !is_category() ) {
-					$category = get_the_category();
-					if($category[0]){
-						echo '<a href="'.get_category_link($category[0]->term_id ).'">'.$category[0]->cat_name.'</a>';
-					}
-				};
-			?>
-		  </li>
 		  <li class="am-active">
 			<?php
 			$title = get_post($id)->post_title;
@@ -91,7 +87,7 @@
 			<h6><?php the_title(); ?></h6>
 			<div>
 				<small>
-					<a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ) ) ?>" rel="author"><?php echo get_the_author(); ?></a> 发布 | <?php echo timeago( get_gmt_from_date(get_the_time('Y-m-d G:i:s')) )?> | 阅读数：<?php tle_views(''); ?> | 评论数：<?php echo get_comments_number('0', '1', '%'); ?>
+					<a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ) ) ?>" rel="author"><?php echo get_the_author(); ?></a> 发布 | <?php echo timeago( get_gmt_from_date(get_the_time('Y-m-d G:i:s')) )?> | 阅读数：<?php tle_views(''); ?>
 				</small>
 			</div>
 			<p>
@@ -111,18 +107,10 @@
 			</p>
 			<hr />
 			<p>
-				<small><?php the_tags('<div>继续浏览有关 ',',',' 的文章</div>'); ?></small>
-			</p>
-			<p>
-				<small>分享至:</small>
-				<?php $sharecontent=subString(str_replace('', '', strip_tags($content)),0,140);?>
-				<a href="http://service.weibo.com/share/share.php?url=<?=curPageURL();?>&title=<?php echo the_title(); ?>" onclick="window.open(this.href, 'share', 'width=550,height=335');return false;" ><img src="<?php echo get_template_directory_uri(); ?>/assets/images/icon_sina.png" alt="" /></a>
-				<a href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=<?=curPageURL();?>&title=<?php echo the_title(); ?>&site=<?php bloginfo('url'); ?>&desc=这是一篇神奇的文章&summary=<?php echo $sharecontent; ?>&pics=<?php if(showThumb($content)){echo showThumb($content)[0];}?>" onclick="window.open(this.href, 'share', 'width=550,height=335');return false;" ><img src="<?php echo get_template_directory_uri(); ?>/assets/images/icon_qzone.png" alt="" /></a>
-				<a href="http://connect.qq.com/widget/shareqq/index.html?url=<?=curPageURL();?>&title=<?php echo the_title(); ?>&site=<?php bloginfo('url'); ?>&desc=这是一篇神奇的文章&summary=<?php echo $sharecontent; ?>&pics=<?php if(showThumb($content)){echo showThumb($content)[0];}?>" onclick="window.open(this.href, 'share', 'width=550,height=335');return false;" ><img src="<?php echo get_template_directory_uri(); ?>/assets/images/icon_qq.png" alt="" /></a>
+				
 			</p>
 		</div>
 		<?php endwhile;  ?>
-		<?php comments_template('', true); ?>
 	</section>
   </div>
   <?php get_sidebar(); ?>

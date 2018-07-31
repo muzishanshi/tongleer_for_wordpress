@@ -33,9 +33,11 @@ if (function_exists('register_sidebar')){
 		'id'            => 'widget_pagesidebar'
 	));
 }
-
+//找回链接功能
+add_filter( 'pre_option_link_manager_enabled', '__return_true' );
 /*缩略图调用*/
 function showThumb($content){
+	//若单纯匹配图片把[img|IMG]修改为img即可，这里莫名的原因匹配到了iframe。
     preg_match_all( "/<[img|IMG].*?src=[\'|\"](.*?)[\'|\"].*?[\/]?>/", $content, $matches );
     $thumb = array();
     if(count($matches[1])<9&&count($matches[1])!=0){
@@ -80,7 +82,72 @@ function tle_strimwidth($str ,$start , $width ,$trimmarker ){
     $output = preg_replace('/^(?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$start.'}((?:[\x00-\x7F]|[\xC0-\xFF][\x80-\xBF]+){0,'.$width.'}).*/s','\1',$str);
     return $output.$trimmarker;
 }
-
+//输出友情链接
+function printLinks(){
+	global $wpdb;
+	$friendlinks='';
+	$rowsLinks = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."links WHERE link_visible='Y' order by link_rating,link_id,link_updated desc");
+	if(count($rowsLinks)>0){
+		$friendlinks.='友情链接：';
+		foreach($rowsLinks as $value){
+			$friendlinks.='<a href="'.$value->link_url.'" target="'.link_target.'" title="'.$value->link_description.'" rel="nofollow '.$value->link_rel.'">'.$value->link_name.'</a>&nbsp;';
+		}
+	}
+	echo $friendlinks;
+}
+/*获得当前页面URL*/
+function curPageURL(){
+	$pageURL = 'http';
+	if ($_SERVER["HTTPS"] == "on"){
+		$pageURL .= "s";
+	}
+	$pageURL .= "://";
+	if ($_SERVER["SERVER_PORT"] != "80"){
+		$pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+	}else{
+		$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+	}
+	return $pageURL;
+}
+/**
+ * 截取编码为utf8的字符串
+ *
+ * @param string $strings 预处理字符串
+ * @param int $start 开始处 eg:0
+ * @param int $length 截取长度
+ */
+function subString($strings, $start, $length) {
+	if (function_exists('mb_substr') && function_exists('mb_strlen')) {
+		$sub_str = mb_substr($strings, $start, $length, 'utf8');
+		return mb_strlen($sub_str, 'utf8') < mb_strlen($strings, 'utf8') ? $sub_str . '...' : $sub_str;
+	}
+	$str = substr($strings, $start, $length);
+	$char = 0;
+	for ($i = 0; $i < strlen($str); $i++) {
+		if (ord($str[$i]) >= 128)
+			$char++;
+	}
+	$str2 = substr($strings, $start, $length + 1);
+	$str3 = substr($strings, $start, $length + 2);
+	if ($char % 3 == 1) {
+		if ($length <= strlen($strings)) {
+			$str3 = $str3 .= '...';
+		}
+		return $str3;
+	}
+	if ($char % 3 == 2) {
+		if ($length <= strlen($strings)) {
+			$str2 = $str2 .= '...';
+		}
+		return $str2;
+	}
+	if ($char % 3 == 0) {
+		if ($length <= strlen($strings)) {
+			$str = $str .= '...';
+		}
+		return $str;
+	}
+}
 if ( ! function_exists( 'tle_views' ) ){
 	function tle_record_visitors(){
 		if (is_singular()) {
@@ -122,7 +189,7 @@ if ( ! function_exists( 'tle_paging' ) ){
 		}
 		if ( $paged < $max_page - $p - 1 ) echo "<li><span> ... </span></li>";
 		//if ( $paged < $max_page - $p ) tle_paging_link( $max_page, '&raquo;' );
-		echo '<li>'; next_posts_link('下一页'); echo '</li>';
+		echo '<li id="tlenextpage">'; next_posts_link('下一页'); echo '</li>';
 		// echo '<li><span>共 '.$max_page.' 页</span></li>';
 		echo '</ul>';
 	}
@@ -196,7 +263,7 @@ function tle_comment_list($comment, $args, $depth) {
 				$rows = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".get_comment_ID()." AND comment_approved='1' ORDER BY comment_date DESC");
 				foreach($rows as $value){
 				?>
-				<header class="am-comment-hd">
+				<header class="am-comment-hd" style="padding:10px;">
 					
 					<div class="am-list-item-text">
 					  <a href="#link-to-user" class="am-comment-author"><?php echo $value->comment_author; ?></a><time datetime="<?php echo $value->comment_date; ?>" title="<?php echo $value->comment_date; ?>"><?php echo $value->comment_date; ?></time>评论<p><?php echo $value->comment_content; ?></p>

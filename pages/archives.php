@@ -77,7 +77,6 @@ get_header();
 		  </div>
 	  </div>
 	</article>
-	<?php comments_template('', true); ?>
 	<?php endwhile;  ?>
 </section>
 <?php get_footer(); ?>

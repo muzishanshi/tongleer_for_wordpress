@@ -22,6 +22,7 @@ class tle_info extends WP_Widget {
 				  <li><i class="am-icon-map-marker am-icon-fw"></i><small>'.do_option("config_address").'</small></li>
 				  <li><i class="am-icon-birthday-cake am-icon-fw"></i><small>'.do_option("config_birthday").'</small></li>
 				  <li><i class="am-icon-info am-icon-fw"></i><small>'.do_option("config_detail").'</small></li>
+				  <li style="text-align:center;"><small><a href="'.do_option("config_about").'">查看更多 ></a></small></li>
 				</ul>
 			</section>
 		';

@@ -27,17 +27,31 @@ class tle_postlist extends WP_Widget {
 		$html='';
 		$html.='
 			<section class="am-panel am-panel-default">
-				<div class="am-panel-hd">'.$title.'</div>
-				<ul class="am-list blog-list">
+				<div class="am-panel-hd"><small>'.$title.'</small></div>
+					<ul class="am-list blog-list">
+						<div data-am-widget="list_news" class="am-list-news am-list-news-default" >
+							<div class="am-list-news-bd">
+								<ul class="am-list">
 		';
 		while (have_posts()){
 			the_post();
+			$match_str = "/((http)+.*?((.gif)|(.jpg)|(.bmp)|(.png)|(.GIF)|(.JPG)|(.PNG)|(.BMP)))/";
+			preg_match_all ($match_str,get_the_content(),$matches,PREG_PATTERN_ORDER);
+			$img="";
+			$width=12;
+			if(count($matches[1])>0){
+				$width=8;
+				$img='<div class="am-u-sm-4 am-list-thumb"><img src="'.$matches[1][0].'" /></div>';
+			}
 			$html.='
-				<li class="am-serif"><a href="'.get_permalink().'" title="'.the_title('','',false).'" target="_blank">'.the_title('','',false).'</a></li>
+				<li class="am-g am-list-item-desced am-list-item-thumbed am-list-item-thumb-left">'.$img.'<a href="'.get_permalink().'" title="'.the_title('','',false).'"><div class="am-u-sm-'.$width.' am-list-main"><small style="word-wrap:break-word;">'.the_title('','',false).'</small></div></a></li>
 			';
 		}
 		wp_reset_query();
 		$html.='
+							</ul>
+						</div>
+					</div>
 				</ul>
 			</section>
 		';
