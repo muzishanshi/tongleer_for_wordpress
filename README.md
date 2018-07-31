@@ -1,4 +1,4 @@
-<img src="https://ws3.sinaimg.cn/large/0078FzW1ly1fswhcipezdj311i0gr7m0.jpg">
+<img src="https://ws3.sinaimg.cn/large/ecabade5ly1ftt995wyw3j211i0hkh5v.jpg">
 
 # TleWeiboForWordPress是一个Wordpress版本的WeiboForWordPress微博主题
 
