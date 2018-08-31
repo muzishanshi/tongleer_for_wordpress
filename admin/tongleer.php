@@ -222,7 +222,7 @@ table td,th{background-color:#fff;}
 				<tr>
 					<td>底部信息</td>
 					<td>
-						<textarea name="config_foot_info" id="config_foot_info" placeholder="" rows="2" cols="100"><?=$config_foot_info;?></textarea>
+						<textarea name="config_foot_info" id="config_foot_info" placeholder="" rows="2" cols="100"><?=do_option('config_foot_info');?></textarea>
 					</td>
 				</tr>
 				<tr>
