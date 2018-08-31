@@ -273,8 +273,17 @@ function tle_comment_list($comment, $args, $depth) {
 	if($comment->comment_parent==0){
 		?>
 		<li class="am-comment">
-			<a href="#link-to-user-home" style="float:left;">
-				<?=str_replace(' src=', ' data-original=', get_avatar( $comment->comment_author_email, $size = '36'));?>
+			<a href="javascript:;" style="float:left;">
+				<?php
+				$host = 'https://secure.gravatar.com';
+				$url = '/avatar/';
+				$size = '50';
+				$rating = 'g';
+				$hash = md5(strtolower($comment->comment_author_email));
+				$avatar = $host . $url . $hash . '?s=' . $size . '&r=' . $rating . '&d=mm';
+				?>
+				<?php //echo str_replace(' src=', ' data-original=', get_avatar( $comment->comment_author_email, $size = '36'));?>
+				<img src="<?=$avatar;?>" alt="" />
 			</a>
 			<div class="am-comment-main">
 			  <header class="am-comment-hd">
