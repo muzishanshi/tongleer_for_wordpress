@@ -105,8 +105,8 @@
 				}
 				?>
 				<?php
-				$content=get_post($id)->post_content;
-				echo $content;
+				//$content=get_post($id)->post_content;echo $content;
+				the_content();
 				?>
 			</p>
 			<hr />

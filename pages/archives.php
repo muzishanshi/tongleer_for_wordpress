@@ -35,8 +35,8 @@ get_header();
 	  </div>
 	  <div class="am-article-bd">
 		<?php
-		$content=get_post($id)->post_content;
-		echo $content;
+		//$content=get_post($id)->post_content;echo $content;
+		the_content();
 		?>
 	  </div>
 	  <div class="am-panel-group" id="accordion">
