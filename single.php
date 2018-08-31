@@ -1,4 +1,44 @@
 <?php get_header(); ?>
+<script type="text/javascript">
+	$(function(){
+		/*鼠标移入和移出事件*/
+		$('.menu li').hover(function(){	
+			$(this).find('.two').show();
+			/*鼠标移入和移出事件*/
+			$('.two li').hover(function(){
+				var content=$(this).find('.hide li:first small').text();
+				if(content != null && content.length != 0){
+					$(this).find('.hide').show();
+				}
+			},function(){
+				$(this).find('.hide').hide();
+			});
+		},function(){
+			$(this).find('.two').hide();
+		});
+	});
+</script>
+<style>
+#nav ul.menu li ul{
+		position: relative; 
+		top: 0px; 
+		background: #fff; 
+		border-radius: 0 0 3px 3px; 
+	}
+	#nav ul.menu li ul li{
+		width: 120px; 
+		position: relative;
+	}
+	#nav ul.menu li ul li .hide{
+		position: absolute; 
+		top: 0px; 
+		left: 120px;
+		border: 1px solid #eee;
+	}
+	.two,.hide{
+		display:none;
+	}
+</style>
 <style>
 	a{
 		color:#000;
@@ -42,17 +82,46 @@
 		<div data-am-widget="tabs">
 		  <ul class="am-tabs-nav">
 			  <li><button type="button" class="am-btn am-radius" onClick="location.href='<?php bloginfo('url'); ?>';">全部</button></li>
-			  <li class="am-dropdown" data-am-dropdown>
-				<button type="button" class="am-dropdown-toggle am-btn am-radius" data-am-dropdown-toggle>更多<span class="am-icon-caret-down"></span></button>
-				<ul class="am-dropdown-content">
+			  <li id="nav" class="am-dropdown" data-am-dropdown>
+				<a class="am-dropdown-toggle am-btn am-radius" data-am-dropdown-toggle><small>更多</small><span class="am-icon-caret-down"></span></a>
+				<ul class="am-dropdown-content menu">
 					<?php
+					global $wpdb,$current_user;
 					$categories=get_categories();
+					//$categories = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." AS t,".$wpdb->term_taxonomy." AS tt WHERE t.term_id=tt.term_id AND tt.taxonomy = 'category' AND parent=0");
 					foreach($categories as $category) {
 						if($category->parent!=0){
 							continue;
 						}
 						?>
-						<li><a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><?php echo $category->name;?></a></li>
+						<!--
+						<li><a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><small><?php echo $category->name;?></small></a></li>
+						-->
+						<li>
+							<a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><small><?php echo $category->name;?></small></a>
+							<ul class="two">
+								<?php
+								$twocate = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." AS t,".$wpdb->term_taxonomy." AS tt WHERE t.term_id=tt.term_id AND tt.taxonomy = 'category' AND parent=".$category->term_id);
+								foreach ($twocate as $two) {
+								?>
+								<li>
+									<a href="<?php echo get_category_link($two->term_id);?>" title="<?php echo $two->name;?>"><small><?php echo $two->name; ?></small></a>
+									<ul class="hide">
+										<?php
+										$threecate = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." AS t,".$wpdb->term_taxonomy." AS tt WHERE t.term_id=tt.term_id AND tt.taxonomy = 'category' AND parent=".$two->term_id);
+										foreach ($threecate as $three) {
+										?>
+										<li><a href="<?php echo get_category_link($three->term_id);?>" title="<?php echo $three->name;?>"><small><?php echo $three->name; ?></small></a></li>
+										<?php
+										}
+										?>
+									</ul>
+								</li>
+								<?php
+								}
+								?>
+							</ul>
+						</li>
 						<?php
 					}
 					?>
