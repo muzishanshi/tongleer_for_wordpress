@@ -49,6 +49,9 @@
 	.banner-head {width: 100%;}
 	.banner-nav {width: 100%;}
 }
+.banner-head a:hover,a:link,a:active,a:visited{
+	color:#fff;
+}
 </style>
 <!-- navigation panel -->
 <header class="am-topbar am-topbar-fixed-top" style="opacity:0.9;">
