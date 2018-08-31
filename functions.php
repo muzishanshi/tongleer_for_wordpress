@@ -273,7 +273,7 @@ function tle_comment_list($comment, $args, $depth) {
 	if($comment->comment_parent==0){
 		?>
 		<li class="am-comment">
-			<a href="#link-to-user-home">
+			<a href="#link-to-user-home" style="float:left;">
 				<?=str_replace(' src=', ' data-original=', get_avatar( $comment->comment_author_email, $size = '36'));?>
 			</a>
 			<div class="am-comment-main">
@@ -295,11 +295,76 @@ function tle_comment_list($comment, $args, $depth) {
 				?>
 				<header class="am-comment-hd" style="padding:10px;">
 					
-					<div class="am-list-item-text">
-					  <a href="#link-to-user" class="am-comment-author"><?php echo $value->comment_author; ?></a><time datetime="<?php echo $value->comment_date; ?>" title="<?php echo $value->comment_date; ?>"><?php echo $value->comment_date; ?></time>评论<p><?php echo $value->comment_content; ?></p>
+					<div class="am-comment-meta">
+					  <a href="#link-to-user" class="am-comment-author"><?php echo $value->comment_author; ?></a><time datetime="<?php echo $value->comment_date; ?>" title="<?php echo $value->comment_date; ?>"><?php echo $value->comment_date; ?></time>评论
+					  <div class="am-fr">
+							<a href="javascript:;" class="replyfloor2" id="replyfloor2<?php echo $value->comment_ID; ?>" data-coid="<?php echo $value->comment_ID; ?>" data-author="<?=$comment->comment_author;?>" data-ccreated="<?=$comment->comment_date;?>" data-ctext="<?php echo htmlspecialchars(strip_tags($comment->comment_content)); ?>">回复</a>
+							此楼
+					  </div>
 					</div>
-					
 				</header>
+				<div class="am-comment-bd" style="border:1px solid #eee;">
+					<p><?php echo $value->comment_content; ?></p>
+					<?php
+					$rows2 = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".$value->comment_ID." AND comment_approved='1' ORDER BY comment_date DESC");
+					foreach($rows2 as $value2){
+						?>
+						<header class="am-comment-hd" style="padding:10px;">
+							
+							<div class="am-comment-meta">
+							  <a href="#link-to-user" class="am-comment-author"><?php echo $value2->comment_author; ?></a><time datetime="<?php echo $value2->comment_date; ?>" title="<?php echo $value2->comment_date; ?>"><?php echo $value2->comment_date; ?></time>评论
+							  <div class="am-fr">
+									<a href="javascript:;" class="replyfloor3" id="replyfloor3<?php echo $value2->comment_ID; ?>" data-coid="<?php echo $value2->comment_ID; ?>" data-author="<?=$comment->comment_author;?>" data-ccreated="<?=$comment->comment_date;?>" data-ctext="<?php echo htmlspecialchars(strip_tags($comment->comment_content)); ?>">回复</a>
+									此楼
+							  </div>
+							</div>
+							
+						</header>
+						<div class="am-comment-bd" style="border:1px solid #eee;">
+							<p><?php echo $value2->comment_content; ?></p>
+							<?php
+							$rows3 = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".$value2->comment_ID." AND comment_approved='1' ORDER BY comment_date DESC");
+							foreach($rows3 as $value3){
+							?>
+							<header class="am-comment-hd" style="padding:10px;">
+								
+								<div class="am-comment-meta">
+								  <a href="#link-to-user" class="am-comment-author"><?php echo $value3->comment_author; ?></a><time datetime="<?php echo $value3->comment_date; ?>" title="<?php echo $value3->comment_date; ?>"><?php echo $value3->comment_date; ?></time>评论
+								  <div class="am-fr">
+										<a href="javascript:;" class="replyfloor4" id="replyfloor4<?php echo $value3->comment_ID; ?>" data-coid="<?php echo $value3->comment_ID; ?>" data-author="<?=$comment->comment_author;?>" data-ccreated="<?=$comment->comment_date;?>" data-ctext="<?php echo htmlspecialchars(strip_tags($comment->comment_content)); ?>">回复</a>
+										此楼
+								  </div>
+								</div>
+								
+							</header>
+							<div class="am-comment-bd" style="border:1px solid #eee;">
+								<p><?php echo $value3->comment_content; ?></p>
+								<?php
+								$rows4 = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".$value3->comment_ID." AND comment_approved='1' ORDER BY comment_date DESC");
+								foreach($rows4 as $value4){
+								?>
+								<header class="am-comment-hd" style="padding:10px;">
+									
+									<div class="am-comment-meta">
+									  <a href="#link-to-user" class="am-comment-author"><?php echo $value4->comment_author; ?></a><time datetime="<?php echo $value4->comment_date; ?>" title="<?php echo $value4->comment_date; ?>"><?php echo $value4->comment_date; ?></time>评论
+									</div>
+									
+								</header>
+								<div class="am-comment-bd" style="border:1px solid #eee;">
+									<p><?php echo $value4->comment_content; ?></p>
+								</div>
+								<?php
+								}
+								?>
+							</div>
+							<?php
+							}
+							?>
+						</div>
+						<?php
+					}
+					?>
+				</div>
 				<?php
 				}
 				?>
