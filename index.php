@@ -23,17 +23,18 @@
 		position: relative; 
 		top: 0px; 
 		background: #fff; 
+		border: 1px solid #eee;
 		border-radius: 0 0 3px 3px; 
 	}
 	#nav ul.menu li ul li{
-		width: 120px; 
 		position: relative;
 	}
 	#nav ul.menu li ul li .hide{
-		position: absolute; 
+		position: relative; 
 		top: 0px; 
-		left: 120px;
+		left: 0px;
 		border: 1px solid #eee;
+		border-radius: 0 0 3px 3px; 
 	}
 	.two,.hide{
 		display:none;
