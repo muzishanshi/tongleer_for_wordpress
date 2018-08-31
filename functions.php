@@ -116,7 +116,7 @@ function tle_strimwidth($str ,$start , $width ,$trimmarker ){
 function printLinks(){
 	global $wpdb;
 	$friendlinks='';
-	$rowsLinks = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."links WHERE link_visible='Y' order by link_rating,link_id,link_updated desc");
+	$rowsLinks = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."links WHERE link_visible='Y' AND link_rating!=0 order by link_rating,link_id,link_updated desc");
 	if(count($rowsLinks)>0){
 		$friendlinks.='友情链接：';
 		foreach($rowsLinks as $value){
