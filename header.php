@@ -5,6 +5,7 @@
   <title><?php wp_title('-', true, 'right'); echo get_option('blogname');if (is_home ()) echo ' - '.get_option('blogdescription'); if ($paged > 1) echo '-Page ', $paged; ?></title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta property="og:image" content="<?php bloginfo('template_url'); ?>/assets/images/w-logo-blue.png"/>
   <meta name="format-detection" content="telephone=no">
   <meta name="renderer" content="webkit">
   <meta http-equiv="Cache-Control" content="no-siteapp"/>
@@ -20,6 +21,7 @@
   <!--[if (gte IE 9)|!(IE)]><!-->
   <script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.min.js"></script>
   <!--<![endif]-->
+  <link href="<?php bloginfo('template_url'); ?>/highlight.css" rel="Stylesheet" type="text/css" />
   <?php wp_head(); ?>
 </head>
 <body style="background-image: url('<?=do_option('config_bg');?>');">
@@ -108,7 +110,9 @@
 	$linksnum = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->links");
 	if (0 < $linksnum) $linksnum= number_format($linksnum);
 	?>
-	<small>关注 <?=$linksnum;?>  |  粉丝 <?php echo $usersnum;?></small><br />
+	<small>
+		<a href="<?=do_option('config_follow_links');?>">关注 <?=$linksnum;?></a>  |  粉丝 <?php echo $usersnum;?>
+	</small><br />
 	<small><?=get_bloginfo('description');?></small><br />
 	<small>微博认证：<?=do_option('config_weiboname');?></small>
 	<div>
