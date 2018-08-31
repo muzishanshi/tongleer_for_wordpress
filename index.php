@@ -225,7 +225,7 @@
 					评论 <?php if ( comments_open() ){echo get_comments_number('0', '1', '%');} ?>
 				</a>
 			  </li>
-			  <li style="border-top:1px solid #ddd;"><a class="am-list-item-text" href="http://service.weibo.com/share/share.php?url=<?php the_permalink() ?>&title=<?php the_title(); ?>" onclick="window.open(this.href, 'share', 'width=550,height=335');return false;" >分享 <span class="am-icon-share-square-o"></span></a></li>
+			  <li style="border-top:1px solid #ddd;"><a class="am-list-item-text" rel="nofollow" href="http://service.weibo.com/share/share.php?url=<?php the_permalink() ?>&title=<?php the_title(); ?>" onclick="window.open(this.href, 'share', 'width=550,height=335');return false;" >分享 <span class="am-icon-share-square-o"></span></a></li>
 			</ul>
 		  </li>
 		  <?php $k++;endwhile;wp_reset_query(); ?>
