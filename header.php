@@ -130,7 +130,7 @@
 			<button class="am-btn am-btn-warning am-radius am-btn-xs am-dropdown-toggle" data-am-dropdown-toggle><span
         class="am-icon-bars"></span></button>
 		  <ul class="am-dropdown-content">
-			<li><a href="<?php if(do_option('config_other_1_link')){echo do_option('config_other_1_link');}else{echo 'javascript:;';}?>"><?php if(do_option('config_other_1_name')){echo do_option('config_other_1_name');}else{echo '^_^';}?></a></li>
+			<li><a style="color:#000;" href="<?php if(do_option('config_other_1_link')){echo do_option('config_other_1_link');}else{echo 'javascript:;';}?>"><?php if(do_option('config_other_1_name')){echo do_option('config_other_1_name');}else{echo '^_^';}?></a></li>
 		  </ul>
 		</div>
 	</div>
