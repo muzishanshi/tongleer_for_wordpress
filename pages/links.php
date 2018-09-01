@@ -12,7 +12,7 @@ get_header();
 	margin:0px auto 0px auto;
 }
 @media screen and (max-width: 960px) {
-	.banner-head {width: 100%;}
+	.page-main {width: 100%;}
 }
 
 .lists {padding:5px; margin:10px auto auto 0;}
@@ -46,6 +46,7 @@ get_header();
 		?>
 	  </div>
 	  <div class="lists">
+		<h6>友情链接</h6>
 		<?php $bookmarks=get_bookmarks();
 			if ( !empty($bookmarks) ){
 				echo '<ul class="link-content clearfix">';

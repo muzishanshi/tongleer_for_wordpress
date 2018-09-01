@@ -13,7 +13,7 @@ function readers_wall( $outer='1',$timer='100',$limit='200' ){
 		$type .= '<a target="_blank" href="'. $c_url . '" title="['.$count->comment_author.']近期评论'. $count->cnt . '次">'.get_avatar( $count->comment_author_email, $size = '36' , get_bloginfo('template_directory').'/assets/images/default.png' ).'</a>';
 	}
 	echo $type;
-};
+}
 ?>
 <style>
 .page-main{
@@ -22,7 +22,7 @@ function readers_wall( $outer='1',$timer='100',$limit='200' ){
 	margin:0px auto 0px auto;
 }
 @media screen and (max-width: 960px) {
-	.banner-head {width: 100%;}
+	.page-main {width: 100%;}
 }
 </style>
 <!-- content section -->
@@ -52,8 +52,7 @@ function readers_wall( $outer='1',$timer='100',$limit='200' ){
 	  <div class="am-panel-bd">
 		<?php //readers_wall(); ?>
 		<!-- 读者墙 -->
-          
-          
+        <ul class="am-avg-sm-8 blog-team">
 		<?php
 			$query="SELECT COUNT(comment_ID) AS cnt, comment_author, comment_author_url, comment_author_email FROM (SELECT * FROM $wpdb->comments LEFT OUTER JOIN $wpdb->posts ON ($wpdb->posts.ID=$wpdb->comments.comment_post_ID) WHERE comment_date > date_sub( NOW(), INTERVAL 24 MONTH ) AND user_id='0' AND comment_author_email != 'android@tongleer.com' AND post_password='' AND comment_approved='1' AND comment_type='') AS tempcmt GROUP BY comment_author_email ORDER BY cnt DESC LIMIT 40";//把android@tongleer.com改成自己的邮箱，在读者墙中排除管理员。最后的数字36是在读者墙中显示的读者个数，根据情况修改！
 			$wall = $wpdb->get_results($query);   
@@ -70,12 +69,12 @@ function readers_wall( $outer='1',$timer='100',$limit='200' ){
 				$avatarrating = 'G';
 				$avatarhash = md5(strtolower($comment->comment_author_email));
 				$avatar = $avatarhost . $avatarurl . $avatarhash . '?s=' . $avatarsize . '&r=' . $avatarrating . '&d=mm';
-				$tmp = "<li><a target='_blank' href='".$url."' title='查看 ".$comment->comment_author." 的站点'><img class='am-thumbnail' src='".$avatar."' alt='".$comment->comment_author." +".$comment->cnt."' /><small>".$comment->comment_author." +".$comment->cnt."</small></a></li>";
-				$output .= $tmp;   
-			}   
-			$output = "<ul class=\"am-avg-sm-8 blog-team\">".$output."</ul>";   
-			echo $output ;
+				?>
+				<li><a target='_blank' href='<?=$url;?>' title='查看 <?=$comment->comment_author;?> 的站点：<?php echo $comment->comment_author." ".$comment->cnt;?>'><img class='am-thumbnail' src='<?=$avatar;?>' alt='<?php echo $comment->comment_author." ".$comment->cnt;?>' /></a></li>
+				<?php
+			}
 		?>
+		</ul>
 	  </div>
 	  <div style="clear:both;"></div>
 	  <p>
