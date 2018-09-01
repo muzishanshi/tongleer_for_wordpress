@@ -114,7 +114,8 @@
 	if (0 < $linksnum) $linksnum= number_format($linksnum);
 	?>
 	<small>
-		<a href="<?=do_option('config_follow_links');?>">关注 <?=$linksnum;?></a>  |  粉丝 <?php echo $usersnum;?>
+		<a href="<?=do_option('config_follow_links');?>">关注 <?=$linksnum;?></a>  |  
+		<a href="<?=do_option('config_fans_readers');?>">粉丝 <?php echo $usersnum;?></a>
 	</small><br />
 	<small><?=get_bloginfo('description');?></small><br />
 	<small>微博认证：<?=do_option('config_weiboname');?></small>
@@ -130,7 +131,7 @@
 			<button class="am-btn am-btn-warning am-radius am-btn-xs am-dropdown-toggle" data-am-dropdown-toggle><span
         class="am-icon-bars"></span></button>
 		  <ul class="am-dropdown-content">
-			<li><a style="color:#000;" href="<?php if(do_option('config_other_1_link')){echo do_option('config_other_1_link');}else{echo 'javascript:;';}?>"><?php if(do_option('config_other_1_name')){echo do_option('config_other_1_name');}else{echo '^_^';}?></a></li>
+			<li><a style="color:#000;" href="<?php if(do_option('config_other_1_link')){echo do_option('config_other_1_link');}else{echo 'javascript:;';}?>" target="_blank"><?php if(do_option('config_other_1_name')){echo do_option('config_other_1_name');}else{echo '^_^';}?></a></li>
 		  </ul>
 		</div>
 	</div>

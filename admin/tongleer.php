@@ -3,7 +3,7 @@ $themename = $dname.'主题';
 
 $options = array(
     "config_description","config_keywords","config_nav","config_favicon","config_bg",
-	"config_headBg","config_headImgUrl","config_nickname","config_follow_links","config_follow_qrcode","config_home_name",
+	"config_headBg","config_headImgUrl","config_nickname","config_follow_links","config_fans_readers","config_follow_qrcode","config_home_name",
 	"config_home_link","config_album_name","config_album_link","config_other_1_name","config_other_1_link",
 	"config_weiboname","config_address","config_birthday","config_detail","config_foot_info",
 	"config_login","config_sex","config_about","config_is_ajax","config_is_pjax","config_is_play"
@@ -147,6 +147,13 @@ table td,th{background-color:#fff;}
 					<td>
 						<input name="config_follow_links" id="config_follow_links" type="text" value="<?php echo do_option('config_follow_links'); ?>">
 						<br /><small>在这里填入头部资料卡关注的链接，一般指向友情链接。</small>
+					</td>
+				</tr>
+				<tr>
+					<td>粉丝链接</td>
+					<td>
+						<input name="config_fans_readers" id="config_fans_readers" type="text" value="<?php echo do_option('config_fans_readers'); ?>">
+						<br /><small>在这里填入头部资料卡粉丝的链接，一般指向读者墙。</small>
 					</td>
 				</tr>
 				<tr>
