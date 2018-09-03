@@ -1,28 +1,82 @@
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head lang="en">
-  <meta charset="<?php bloginfo( 'charset' ); ?>">
-  <title><?php wp_title('-', true, 'right'); echo get_option('blogname');if (is_home ()) echo ' - '.get_option('blogdescription'); if ($paged > 1) echo '-Page ', $paged; ?></title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta property="og:image" content="<?php bloginfo('template_url'); ?>/assets/images/w-logo-blue.png"/>
-  <meta name="format-detection" content="telephone=no">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-siteapp"/>
-  <meta name="author" content="<?=get_bloginfo('name');?>">
-  <meta name="description" itemprop="description" content="<?=do_option('config_description');?>">
-  <meta name="keywords" content="<?=do_option('config_keywords');?>">
-  <link rel="stylesheet" type="text/css" media="all" href="<?php echo get_template_directory_uri(); ?>/assets/css/style.css" />
-  <link rel="alternate icon" href="<?=do_option('config_favicon');?>" type="image/png" />
-  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/amazeui.min.css"/>
-  <!--[if lt IE 9]>-->
-  <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
-  <!--[endif]-->
-  <!--[if (gte IE 9)|!(IE)]><!-->
-  <script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.min.js"></script>
-  <!--<![endif]-->
-  <link href="<?php bloginfo('template_url'); ?>/highlight.css" rel="Stylesheet" type="text/css" />
-  <?php wp_head(); ?>
+	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<title><?php wp_title('-', true, 'right'); echo get_option('blogname');if (is_home ()) echo ' - '.get_option('blogdescription'); if ($paged > 1) echo '-Page ', $paged; ?></title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta property="og:image" content="<?php bloginfo('template_url'); ?>/assets/images/w-logo-blue.png"/>
+	<meta name="format-detection" content="telephone=no">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp"/>
+	<meta name="author" content="<?=get_bloginfo('name');?>">
+	<?php
+	$keywords = get_bloginfo('name');
+	$description = get_bloginfo('description', 'display');
+	if (is_home()){
+		if(do_option('config_keywords')!=""){
+			$keywords = do_option('config_keywords');
+		}else{
+			$keywords = get_bloginfo('name');
+		}
+		if(do_option('config_description')!=""){
+			$description = do_option('config_description');
+		}else{
+			$description = get_bloginfo('description', 'display');
+		}
+	}elseif (is_single()){
+		$keywords = get_post_meta($post->ID, "keywords", true);
+		if($keywords == ""){
+			$tags = wp_get_post_tags($post->ID);
+			foreach ($tags as $tag){
+				$keywords = $keywords.$tag->name.",";
+			}
+			$keywords = rtrim($keywords, ', ');
+		}
+		$description = get_post_meta($post->ID, "description", true);
+		if($description == ""){
+			if($post->post_excerpt){
+				$description = $post->post_excerpt;
+			}else{
+				$description = mb_strimwidth(strip_tags(apply_filters('the_content',$post->post_content)),0,200);
+			}
+		}
+	}elseif (is_page()){
+		$keywords = get_post_meta($post->ID, "keywords", true);
+		if($keywords == ""){
+			$keywords = get_bloginfo('title');
+		}
+		$description = get_post_meta($post->ID, "description", true);
+		if($description == ""){
+			if($post->post_excerpt){
+				$description = $post->post_excerpt;
+			}else{
+				$description = mb_strimwidth(strip_tags(apply_filters('the_content',$post->post_content)),0,200);
+			}
+		}
+	}elseif (is_category()){
+		$keywords = single_cat_title('', false);
+		$description = category_description();
+	}elseif (is_tag()){
+		$keywords = single_tag_title('', false);
+		$description = tag_description();
+	}
+	$keywords = trim(strip_tags($keywords));
+	$description = trim(strip_tags($description));
+	?>
+	<meta name="keywords" content="<?php echo $keywords; ?>" />
+	<meta name="description" content="<?php echo $description; ?>" />
+	<link rel="stylesheet" type="text/css" media="all" href="<?php echo get_template_directory_uri(); ?>/assets/css/style.css" />
+	<link rel="alternate icon" href="<?=do_option('config_favicon');?>" type="image/png" />
+	<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/amazeui.min.css"/>
+	<!--[if lt IE 9]>-->
+	<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+	<!--[endif]-->
+	<!--[if (gte IE 9)|!(IE)]><!-->
+	<script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.min.js"></script>
+	<!--<![endif]-->
+	<link href="<?php bloginfo('template_url'); ?>/highlight.css" rel="Stylesheet" type="text/css" />
+	<?php wp_head(); ?>
 </head>
 <body style="background-image: url('<?=do_option('config_bg');?>');">
 <style>
