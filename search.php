@@ -182,14 +182,15 @@
 				$youku='player.youku.com';
 				$miaopai='gslb.miaopai.com';
 				$douyin='aweme.snssdk.com';
+				$qq='v.qq.com';
 				if(count($thumb)<9&&count($thumb)!=0){
-					if(strpos($thumb[0],$youku)===false&&strpos($thumb[0],$miaopai)===false&&strpos($thumb[0],$douyin)===false){
+					if(strpos($thumb[0],$youku)===false&&strpos($thumb[0],$miaopai)===false&&strpos($thumb[0],$douyin)===false&&strpos($thumb[0],$qq)===false){
 					?>
 					<div class="am-avg-sm-3" data-am-widget="gallery" data-am-gallery="{ pureview: true }">
 					  <img src="<?=$thumb[0];?>"  alt="" width="180" />
 					</div>
 					<?php
-					}else if(strpos($thumb[0],'player.youku.com')){
+					}else if(strpos($thumb[0],$youku)||strpos($thumb[0],$qq)){
 						?>
 						<iframe height="400" width="100%" src="<?=$thumb[0];?>" frameborder="0" "allowfullscreen"></iframe>
 						<?php
