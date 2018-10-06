@@ -63,7 +63,7 @@ class tle_count extends WP_Widget {
 						$avatar = "https://secure.gravatar.com/avatar/$hash?s=40d=mm&r=g";
 						?>
 						<img src="<?=$avatar;?>" alt="" class="am-circle" width="18" height="18">
-						<small><a href="<?=$value->user_url;?>" target="_blank" title="<?=$value->user_nicename;?>"><?=$value->user_nicename;?><?php if($value->meta_value!=''){?>（<?=subString(str_replace('', '', strip_tags($value->meta_value)),0,20);?>）<?php }else{?>（Ta暂无介绍）<?php }?></a></small>
+						<small><a href="javascript:;" target="_blank" title="<?=$value->user_nicename;?><?php if($value->user_url){?>（<?=$value->user_url;?>）<?php }?>"><?=$value->user_nicename;?><?php if($value->meta_value!=''){?>（<?=subString(str_replace('', '', strip_tags($value->meta_value)),0,20);?>）<?php }else{?>（Ta暂无介绍）<?php }?></a></small>
 					</div>
 					<?php
 					}
@@ -81,7 +81,7 @@ class tle_count extends WP_Widget {
 						$avatar = "https://secure.gravatar.com/avatar/$hash?s=40d=mm&r=g";
 						?>
 						<img src="<?=$avatar;?>" alt="" class="am-circle" width="18" height="18">
-						<small><?=$value->user_nicename;?>于<?=$value->post_date;?>发表：<font color="#aaa"><?=$value->post_title;?></font><?=subString(str_replace('', '', strip_tags($value->post_content)),0,35);?></small>
+						<small><?=$value->user_nicename;?>于<?=$value->post_date;?>发表：<?=$value->post_title;?><font color="#aaa"><?=subString(str_replace('', '', strip_tags($value->post_content)),0,35);?></font></small>
 					</div>
 					<?php
 					}
