@@ -6,7 +6,7 @@
 	margin:0px auto 0px auto;
 }
 @media screen and (max-width: 960px) {
-	.banner-head {width: 100%;}
+	.page-main {width: 100%;}
 }
 </style>
 <!-- content section -->
