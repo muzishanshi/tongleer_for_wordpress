@@ -32,7 +32,7 @@ get_header();
 <section class="page-main">
 	<?php
 	global $wpdb,$current_user;
-	$rows = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."posts WHERE post_status='publish' AND post_type='post' ORDER BY post_modified DESC");
+	$rows = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."posts WHERE post_status='publish' AND post_type='post' ORDER BY post_date DESC");
 	$album=array();
 	$temi=0;
 	foreach($rows as $value){
