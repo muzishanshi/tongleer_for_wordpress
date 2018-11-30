@@ -70,7 +70,7 @@
 	<link rel="alternate icon" href="<?=do_option('config_favicon');?>" type="image/png" />
 	<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/amazeui.min.css"/>
 	<!--[if lt IE 9]>-->
-	<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
 	<!--[endif]-->
 	<!--[if (gte IE 9)|!(IE)]><!-->
 	<script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.min.js"></script>
@@ -81,7 +81,7 @@
 <body style="background-image: url('<?=do_option('config_bg');?>');">
 <style>
 .banner-head{
-	background-image: url(http://api.tongleer.com/picturebed/img/bg.jpg);
+	background-image: url(https://ws3.sinaimg.cn/large/ecabade5ly1fxqhxjwsv9j21hc0u0wn1.jpg);
 	width:960px;
 	margin:10px auto -10px auto;
 	text-align: center;
@@ -154,7 +154,7 @@
   </div>
 </header>
 <!--end navigation panel -->
-<section class="banner-head" style="background-image:url('<?php if(do_option('config_headBg')){echo do_option('config_headBg');}else{echo 'http://api.tongleer.com/picturebed/img/bg.jpg';}?>')">
+<section class="banner-head" style="background-image:url('<?php if(do_option('config_headBg')){echo do_option('config_headBg');}else{echo 'https://ws3.sinaimg.cn/large/ecabade5ly1fxqhxjwsv9j21hc0u0wn1.jpg';}?>')">
 	<img class="am-circle" src="<?php if(do_option('config_headImgUrl')){echo do_option('config_headImgUrl');}else{echo 'https://cambrian-images.cdn.bcebos.com/39ceafd81d6813a014e747db4aa6f0eb_1524963877208.jpeg';}?>" width="100" height="100"/><br />
 	<span>
 		<?=do_option('config_nickname');?>
@@ -177,7 +177,7 @@
 		<div class="am-dropdown" data-am-dropdown>
 		  <button class="am-btn am-btn-warning am-radius am-btn-xs am-dropdown-toggle">关注</button>
 		  <div class="am-dropdown-content">
-			<img src="<?php if(do_option('config_follow_qrcode')){echo do_option('config_follow_qrcode');}else{echo 'http://me.tongleer.com/content/uploadfile/201706/008b1497454448.png';}?>" width="150" height="150"/>
+			<img src="<?php if(do_option('config_follow_qrcode')){echo do_option('config_follow_qrcode');}else{echo 'https://ws3.sinaimg.cn/large/ecabade5ly1fxqhvlfpxvj203w03wt8m.jpg';}?>" width="150" height="150"/>
 		  </div>
 		</div>
 		<button type="button" class="am-btn am-btn-warning am-radius am-btn-xs" onClick="location.href='<?php if(do_option('config_home_link')){echo do_option('config_home_link');}else{echo 'http://www.tongleer.com';}?>';"><?php if(do_option('config_home_name')){echo do_option('config_home_name');}else{echo '主页';}?></button>
