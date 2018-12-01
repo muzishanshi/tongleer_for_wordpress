@@ -186,7 +186,7 @@
 				<?php
 				$thumb=showThumb($post->post_content);
 				$youku='player.youku.com';
-				$miaopai='gslb.miaopai.com';
+				$miaopai='miaopai.com';
 				$douyin='aweme.snssdk.com';
 				$qq='v.qq.com';
 				if(count($thumb)<9&&count($thumb)!=0){
@@ -199,6 +199,10 @@
 					}else if(strpos($thumb[0],$youku)||strpos($thumb[0],$qq)){
 						?>
 						<iframe height="400" width="100%" src="<?=$thumb[0];?>" frameborder="0" "allowfullscreen"></iframe>
+						<?php
+					}else if(strpos($thumb[0],'miaopai.com')){
+						?>
+						<video src="<?=$thumb[0];?>" controls="controls"></video>
 						<?php
 					}
 				}else if(count($thumb)>=9){
