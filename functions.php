@@ -120,7 +120,7 @@ function printLinks(){
 	if(count($rowsLinks)>0){
 		$friendlinks.='友情链接：';
 		foreach($rowsLinks as $value){
-			$friendlinks.='<a href="'.$value->link_url.'" target="'.link_target.'" title="'.$value->link_description.'" rel="nofollow '.$value->link_rel.'">'.$value->link_name.'</a>&nbsp;';
+			$friendlinks.='<a href="'.$value->link_url.'" target="'.$value->link_target.'" title="'.$value->link_description.'" rel="nofollow '.$value->link_rel.'">'.$value->link_name.'</a>&nbsp;';
 		}
 	}
 	echo $friendlinks;
