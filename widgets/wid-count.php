@@ -34,56 +34,79 @@ class tle_count extends WP_Widget {
 					<span>文章</span></a>
 				</li>
 				<div id="commentShowDiv">
-					<span style="text-align: center;"><small><b>最新评论</b></small></span>
 					<?php
 					$rowsComments = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_approved='1' order by comment_date desc limit 0,5");
-					foreach($rowsComments as $value){
-					?>
-					<div>
-						<?php
-						$hash = md5($value->comment_author_email);
-						$avatar = "https://secure.gravatar.com/avatar/$hash?s=40d=mm&r=g";
+					if($rowsComments){
 						?>
-						<img src="<?=$avatar;?>" alt="" class="am-circle" width="18" height="18">
-						<small><?=$value->comment_author;?>说：<?=subString(str_replace('', '', strip_tags($value->comment_content)),0,20);?></small>
-					</div>
-					<?php
+						<span style="text-align: center;"><small><b>最新评论</b></small></span>
+						<?php
+						foreach($rowsComments as $value){
+						?>
+						<div>
+							<?php
+							$hash = md5($value->comment_author_email);
+							$avatar = "https://secure.gravatar.com/avatar/$hash?s=40d=mm&r=g";
+							?>
+							<img src="<?=$avatar;?>" alt="" class="am-circle" width="18" height="18">
+							<small><a href="<?=$value->comment_author_url!=""?$value->comment_author_url:"javascript:;";?>" title="<?=$value->comment_author;?>" target="_blank" rel="nofollow"><?=$value->comment_author;?></a>说：<?=subString(str_replace('', '', strip_tags($value->comment_content)),0,20);?></small>
+						</div>
+						<?php
+						}
 					}
 					?>
 				</div>
 				<div id="userShowDiv" style="display:none;">
-					<span style="text-align: center;"><small><b>最新粉丝</b></small></span>
 					<?php
 					$rowsUser = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."users as u,".$wpdb->prefix."usermeta as um WHERE u.ID=um.user_id AND meta_key='description' order by user_registered desc limit 0,5");
-					foreach($rowsUser as $value){
-					?>
-					<div>
-						<?php
-						$hash = md5($value->user_email);
-						$avatar = "https://secure.gravatar.com/avatar/$hash?s=40d=mm&r=g";
+					if($rowsUser){
 						?>
-						<img src="<?=$avatar;?>" alt="" class="am-circle" width="18" height="18">
-						<small><a href="javascript:;" target="_blank" title="<?=$value->user_nicename;?><?php if($value->user_url){?>（<?=$value->user_url;?>）<?php }?>"><?=$value->user_nicename;?><?php if($value->meta_value!=''){?>（<?=subString(str_replace('', '', strip_tags($value->meta_value)),0,20);?>）<?php }else{?>（Ta暂无介绍）<?php }?></a></small>
-					</div>
-					<?php
+						<span style="text-align: center;"><small><b>最新粉丝</b></small></span>
+						<?php
+						foreach($rowsUser as $value){
+						?>
+						<div>
+							<?php
+							$hash = md5($value->user_email);
+							$avatar = "https://secure.gravatar.com/avatar/$hash?s=40d=mm&r=g";
+							?>
+							<img src="<?=$avatar;?>" alt="" class="am-circle" width="18" height="18">
+							<small>
+								<a href="javascript:;" target="_blank" title="<?=$value->user_nicename;?><?php if($value->user_url){?>（<?=$value->user_url;?>）<?php }?>">
+									<?=$value->user_nicename;?>
+									<font color="#aaa">
+										<?php if($value->meta_value!=''){?>
+											（<?=subString(str_replace('', '', strip_tags($value->meta_value)),0,20);?>）
+										<?php }else{?>
+											（Ta暂无介绍）
+										<?php }?>
+									</font>
+								</a>
+							</small>
+						</div>
+						<?php
+						}
 					}
 					?>
 				</div>
 				<div id="articleShowDiv" style="display:none;">
-					<span style="text-align: center;"><small><b>最新文章</b></small></span>
 					<?php
 					$rowsContents = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."posts as p,".$wpdb->prefix."users as u WHERE u.ID=p.post_author AND post_status='publish' AND post_type='post' order by post_date desc limit 0,5");
-					foreach($rowsContents as $value){
-					?>
-					<div>
-						<?php
-						$hash = md5($value->user_email);
-						$avatar = "https://secure.gravatar.com/avatar/$hash?s=40d=mm&r=g";
+					if($rowsContents){
 						?>
-						<img src="<?=$avatar;?>" alt="" class="am-circle" width="18" height="18">
-						<small><?=$value->user_nicename;?>于<?=$value->post_date;?>发表：<?=$value->post_title;?><font color="#aaa"><?=subString(str_replace('', '', strip_tags($value->post_content)),0,35);?></font></small>
-					</div>
-					<?php
+						<span style="text-align: center;"><small><b>最新文章</b></small></span>
+						<?php
+						foreach($rowsContents as $value){
+						?>
+						<div>
+							<?php
+							$hash = md5($value->user_email);
+							$avatar = "https://secure.gravatar.com/avatar/$hash?s=40d=mm&r=g";
+							?>
+							<img src="<?=$avatar;?>" alt="" class="am-circle" width="18" height="18">
+							<small><?=$value->user_nicename;?>于<?=$value->post_date;?>发表：<a href="<?=$value->guid;?>" title="<?=$value->post_title;?>"><?=$value->post_title;?></a><font color="#aaa"><?=subString(str_replace('', '', strip_tags($value->post_content)),0,35);?></font></small>
+						</div>
+						<?php
+						}
 					}
 					?>
 				</div>

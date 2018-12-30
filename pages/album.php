@@ -141,6 +141,7 @@ get_header();
 		<li class="am-pagination-next"><a href="?page_now=<?=$page;?>">尾页</a></li>
 	  <?php }?>
 	</ul>
+	<!--
 	<script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.ias.min.js" type="text/javascript"></script>
 	<script>
 	var ias = $.ias({
@@ -150,14 +151,15 @@ get_header();
 		next: ".am-pagination a#tlenextpage", /*下一页元素*/
 	});
 	ias.extension(new IASTriggerExtension({
-		text: '<div class="cat-nav am-round"><small>猛点几次查看更多内容</small></div>', /*此选项为需要点击时的文字*/
-		offset: 2, /*设置此项后，到 offset+1 页之后需要手动点击才能加载，取消此项则一直为无限加载*/
+		text: '<div class="cat-nav am-round"><small></small></div>', /*此选项为需要点击时的文字*/
+		offset: false, /*设置此项后，到 offset+1 页之后需要手动点击才能加载，取消此项则一直为无限加载*/
 	}));
 	ias.extension(new IASSpinnerExtension());
 	ias.extension(new IASNoneLeftExtension({
 		text: '', /*加载完成时的提示*/
 	}));
 	</script>
+	-->
 </section>
 <!-- end content section -->
 <?php get_footer(); ?>

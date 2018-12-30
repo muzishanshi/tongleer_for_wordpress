@@ -39,6 +39,55 @@ http://www.tongleer.com
  - Q群：770956878
 
 # 版本记录
+2018-12-30 V1.0.5：
+
+	1、优化评论为侧滑评论形式等，但那3个开关依然没有完善；
+	2、此侧滑评论支持邮件通知功能，需手动在function.php中添加如下代码：
+	
+	```php
+	//使用smtp发邮件
+	if(!function_exists('mail_smtp')){
+		function mail_smtp( $phpmailer ) {
+			$phpmailer->IsSMTP();
+			$phpmailer->From = "android@tongleer.com"; //发件人
+			$phpmailer->FromName = "同乐儿"; //发件人昵称
+			$phpmailer->SMTPAuth = true;//启用SMTPAuth服务
+			$phpmailer->Port = 465;//MTP邮件发送端口，这个和下面的对应，如果这里填写25，则下面为空白//企业465
+			$phpmailer->SMTPSecure ="";//是否验证 ssl，这个和上面的对应，如果不填写，则上面的端口须为25//ssl
+			$phpmailer->Host = "ssl://smtp.exmail.qq.com";//邮箱的SMTP服务器地址，如果是QQ的则为：smtp.exmail.qq.com
+			$phpmailer->Username = "android@tongleer.com";//你的邮箱地址
+			$phpmailer->Password ="ly159357";//你的邮箱登陆密码
+		}
+		add_action('phpmailer_init', 'mail_smtp');
+	}
+	/* comment_mail_notify v1.0 by willin kan. (所有回复都发邮件) */
+	function comment_mail_notify($comment_id) {
+	  $comment = get_comment($comment_id);
+	  $parent_id = $comment->comment_parent ? $comment->comment_parent : '';
+	  $spam_confirmed = $comment->comment_approved;
+	  if (($parent_id != '') && ($spam_confirmed != 'spam')) {
+		$wp_email = 'no-reply@' . preg_replace('#^www.#', '', strtolower($_SERVER['SERVER_NAME'])); //e-mail 发出点, no-reply 可改为可用的 e-mail.
+		$to = trim(get_comment($parent_id)->comment_author_email);
+		$subject = '您在 [' . get_option("blogname") . '] 的留言有了回复';
+		$message = '
+		<div style="background-color:#eef2fa; border:1px solid #d8e3e8; color:#111; padding:0 15px; -moz-border-radius:5px; -webkit-border-radius:5px; -khtml-border-radius:5px;">
+		  <p>' . trim(get_comment($parent_id)->comment_author) . ', 您好!</p>
+		  <p>您曾在《' . get_the_title($comment->comment_post_ID) . '》的留言:<br />'
+		   . trim(get_comment($parent_id)->comment_content) . '</p>
+		  <p>' . trim($comment->comment_author) . ' 给您的回复:<br />'
+		   . trim($comment->comment_content) . '<br /></p>
+		  <p>您可以点击 查看回复完整內容</p>
+		  <p>欢迎再度光临 ' . get_option('blogname') . '</p>
+		  <p>(此邮件由系统自动发送，请勿回复.)</p>
+		</div>';
+		  $from = "From: \"" . get_option('blogname') . "\" <$wp_email>";
+		  $headers = "$from\nContent-Type: text/html; charset=" . get_option('blog_charset') . "\n";
+		  wp_mail( $to, $subject, $message, $headers );
+	  }
+	}
+	add_action('comment_post', 'comment_mail_notify');
+	```
+	
 v1.0.4：<br />
 	新增更多分类支持到三级导航<br />
 	修复个别页面及文章页内容显示方式<br />

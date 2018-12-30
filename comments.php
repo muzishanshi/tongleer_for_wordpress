@@ -1,2 +1,134 @@
-<?php	defined('ABSPATH') or die('This file can not be loaded directly.');	if ( !comments_open() ) return;?><div style="padding:10px;background-color:#fff;">  <div class="am-u-md-8 am-u-sm-centered">	<?php	date_default_timezone_set(PRC);	$closeTimer = (strtotime(date('Y-m-d G:i:s'))-strtotime(get_the_time('Y-m-d G:i:s')))/86400;	if(get_option('close_comments_for_old_posts') && $closeTimer > get_option('close_comments_days_old')){	?>	<button type="button" class="am-btn am-btn-default am-btn-block">评论关闭</button>	<?php	}else{	?>		<div class="am-g">	  <div class="am-u-md-8 am-u-sm-centered">		<form class="am-form-inline" id="comment-form" role="form" method="post" action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php">		  <div class="am-form-group">			<img class="am-radius" src="<?php if(do_option('config_headImgUrl')!=''){echo do_option('config_headImgUrl');}else{echo 'https://cambrian-images.cdn.bcebos.com/39ceafd81d6813a014e747db4aa6f0eb_1524963877208.jpeg';}?>" width="35" height="35"/>		  </div>		  <div class="am-form-group">			<textarea type="text" name="comment" rows="4" cols="40" placeholder="<?php if(is_user_logged_in()){echo '我要发表评论...';}else{echo '登陆后可评论...';} ?>" id="comment-text" maxLength="140" class="am-form-field am-input-sm"></textarea>		  </div>		  <div class="am-form-group">			  <button type="submit" class="am-btn am-btn-warning am-radius am-btn-xs">评论</button>			  <input type="hidden" id="comment-login" data-login="<?=is_user_logged_in();?>"></p>			  <?php comment_id_fields(); do_action('comment_form', $post->ID); ?>			  <input type="hidden" name="pid" id="comment-pid" value="0" size="22" tabindex="1"/>		  </div>		</form>	  </div>	</div>	<?php	}	?>  </div></div><a name="comments"></a>
-<?php	if ( have_comments() ) {?>	<ul class="am-comments-list" style="padding:10px;background-color:#fff;">		<?php		wp_list_comments( array(			'type'      => 'comment',			'callback'      => 'tle_comment_list',			'reverse_top_level' => true,			'reverse_children'  => true		) );		?>	</ul>	<div><?php paginate_comments_links();?></div><?php } ?><div class="am-modal am-modal-prompt" tabindex="-1" id="replydialog"><form class="am-form" id="reply-form" method="post" action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php">  <div class="am-modal-dialog">    <div class="am-modal-hd">评论</div>    <div class="am-modal-bd">	      <input type="text" name="comment" id="reply-text" class="am-modal-prompt-input">    	</div>    <div class="am-modal-footer">      <span class="am-modal-btn">		<button type="button" class="am-btn am-btn-warning am-radius am-btn-sm" data-am-modal-cancel>取消</button>	  </span>      <span class="am-modal-btn">		<?php comment_id_fields(); do_action('comment_form', $post->ID); ?>		<input type="hidden" name="comment_parent" id="reply-pid" value="0" size="22" tabindex="1"/>		<button type="submit" class="am-btn am-btn-warning am-radius am-btn-sm" data-am-modal-confirm>提交</button>	  </span>    </div>  </div></form></div><!-- end post comment --><script>$(function() {	$('#comment-form').submit(function(){		if($('#comment-text').val()==''){			return false;		}		if($('#comment-login').attr('data-login')!=1){			alert('登陆后方可评论');			return false;		}	});	$('#reply-form').submit(function(){		if($('#reply-text').val()==''){			return false;		}	});	$(".replyfloor,.replyfloor2,.replyfloor3,.replyfloor4,.replyfloor5").each(function(){		var id=$(this).attr("id");		$("#"+id).click( function () {			if($('#comment-login').attr('data-login')!=1){				alert('登陆后方可评论');				return;			}			$('#reply-pid').val($(this).attr('data-coid'));			$('#replydialog').modal({			  relatedTarget: this,			  onConfirm: function(e) {				$('#reply-form').submit();			  },			  onCancel: function(e) {			  }			});		});	});	});</script>
+<?php 
+defined('ABSPATH') or die('This file can not be loaded directly.');
+
+global $comment_ids; $comment_ids = array();
+foreach ( $comments as $comment ) {
+	if (get_comment_type() == "comment") {
+		$comment_ids[get_comment_id()] = ++$comment_i;
+	}
+} 
+
+if ( !comments_open() ) return;
+
+$my_email = get_bloginfo ( 'admin_email' );
+$str = "SELECT COUNT(*) FROM $wpdb->comments WHERE comment_post_ID = $post->ID AND comment_approved = '1' AND comment_type = '' AND comment_author_email";
+$count_t = $post->comment_count;
+
+date_default_timezone_set(PRC);
+$closeTimer = (strtotime(date('Y-m-d G:i:s'))-strtotime(get_the_time('Y-m-d G:i:s')))/86400;
+?>
+<div id="post-comments" style="font-size:12px"><!--侧滑评论所需ID-->
+<?php 
+if ( have_comments() ) { 
+?>
+<div id="postcomments">
+	<br />
+	<h3 id="comments">
+		网友最新评论<b><?php echo ' ('.$count_t.')'; ?></b>
+	</h3>
+	<ol class="commentlist">
+		<?php wp_list_comments('type=comment&callback=tle_comment_list') ?>
+	</ol>
+	<div class="pagenav">
+		<?php paginate_comments_links('prev_next=0');?>
+	</div>
+</div>
+<?php 
+} 
+?>
+<div id="respond" class="no_webshot">
+	<?php if ( get_option('comment_registration') && !is_user_logged_in() ) { ?>
+	<h3 class="queryinfo">
+		<div class="comt">
+		<?php printf('您必须 <a href="%s">登录</a> 才能发表评论！', wp_login_url( get_permalink() ) );?>
+		</div>
+	</h3>
+	<?php }elseif( get_option('close_comments_for_old_posts') && $closeTimer > get_option('close_comments_days_old') ) { ?>
+	<h3 class="queryinfo">
+		<div class="comt-title">文章评论已关闭！</div>
+	</h3>
+	<?php }else{ ?>
+	<form action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php" method="post" id="commentform">
+		
+		<div class="comt-title">
+			<div class="comt-avatar pull-left">
+				<?php 
+					global $current_user;
+					get_currentuserinfo();
+					$host = 'https://secure.gravatar.com';
+					$url = '/avatar/';
+					$size = '50';
+					$rating = 'g';
+					$hash = md5(strtolower($comment->comment_author_email));
+					$avatar = $host . $url . $hash . '?s=' . $size . '&r=' . $rating . '&d=mm';
+					$avatar=get_bloginfo('template_directory').'/assets/images/default.png';
+					if ( is_user_logged_in() ) {
+						//echo get_avatar( $current_user->user_email, $size = '28' , $avatar );
+						?>
+						<img src="<?=$avatar;?>" />
+						<?php
+					}elseif( !is_user_logged_in() && get_option('require_name_email') && $comment_author_email=='' ) {
+						//echo get_avatar( $current_user->user_email, $size = '28' , $avatar );
+						?>
+						<img src="<?=$avatar;?>" />
+						<?php
+					}
+					elseif( !is_user_logged_in() && get_option('require_name_email') && $comment_author_email!=='' )  {
+						//echo get_avatar( $comment->comment_author_email, $size = '28' , $avatar );
+						?>
+						<img src="<?=$avatar;?>" />
+						<?php
+					}
+					else{
+						//echo get_avatar( $comment->comment_author_email, $size = '28' , $avatar );
+						?>
+						<img src="<?=$avatar;?>" />
+						<?php
+					}
+				?>
+			</div>
+			<div class="comt-author pull-left">
+			<?php 
+				if ( is_user_logged_in() ) {
+					printf($user_identity.'<span>发表我的评论</span>');
+				}else{
+					if( get_option('require_name_email') && !empty($comment_author_email) ){
+						printf($comment_author.' <span>发表我的评论</span> &nbsp; <a class="switch-author" href="javascript:;" data-type="switch-author" style="font-size:12px;">换个身份</a>');
+					}else{
+						printf('发表我的评论');
+					}
+				}
+			?>
+			</div>
+			<a id="cancel-comment-reply-link" class="pull-right" href="javascript:;">取消评论</a>
+		</div>
+		
+		<div class="comt">
+			<div class="comt-box">
+				<textarea placeholder="写点什么..." class="input-block-level comt-area" name="comment" id="comment" cols="100%" rows="3" tabindex="1" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();return false};"></textarea>
+				<div class="comt-ctrl">
+					<button class="btn btn-primary pull-right" type="submit" name="submit" id="submit" tabindex="5"><i class="icon-ok-circle icon-white icon12"></i> 提交评论</button>
+					<div class="comt-tips pull-right"><?php comment_id_fields(); do_action('comment_form', $post->ID); ?></div>
+					<span data-type="comment-insert-smilie" class="muted comt-smilie"><i class="icon-thumbs-up icon12"></i> 表情</span>
+					<span class="muted comt-mailme"><?php tle_add_checkbox() ?></span>
+				</div>
+			</div>
+
+			<?php if ( !is_user_logged_in() ) { ?>
+				<?php if( get_option('require_name_email') ){ ?>
+					<div class="comt-comterinfo" id="comment-author-info" <?php if ( !empty($comment_author) ) echo 'style="display:none"'; ?>>
+						<ul>
+							<li class="form-inline"><label class="hide" for="author">昵称</label><input class="ipt" type="text" name="author" id="author" value="<?php echo esc_attr($comment_author); ?>" tabindex="2" placeholder="昵称"><span class="help-inline">昵称 (必填)</span></li>
+							<li class="form-inline"><label class="hide" for="email">邮箱</label><input class="ipt" type="text" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" tabindex="3" placeholder="邮箱"><span class="help-inline">邮箱 (必填)</span></li>
+							<li class="form-inline"><label class="hide" for="url">网址</label><input class="ipt" type="text" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" tabindex="4" placeholder="网址"><span class="help-inline">网址</span></li>
+						</ul>
+					</div>
+				<?php } ?>
+			<?php } ?>
+		</div>
+
+		
+	</form>
+	<?php } ?>
+</div>
+</div>

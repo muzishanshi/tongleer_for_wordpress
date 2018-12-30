@@ -99,12 +99,13 @@
 						<li><a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><small><?php echo $category->name;?></small></a></li>
 						-->
 						<li>
-							<a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><small><?php echo $category->name;?></small></a>
-							<ul class="two">
-								<?php
-								$twocate = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." AS t,".$wpdb->term_taxonomy." AS tt WHERE t.term_id=tt.term_id AND tt.taxonomy = 'category' AND parent=".$category->term_id);
-								foreach ($twocate as $two) {
+						<a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><small><?php echo $category->name;?></small></a>
+							<?php
+							$twocate = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." AS t,".$wpdb->term_taxonomy." AS tt WHERE t.term_id=tt.term_id AND tt.taxonomy = 'category' AND parent=".$category->term_id);
+							if($twocate){
 								?>
+								<ul class="two">
+								<?php foreach ($twocate as $two) {?>
 								<li>
 									<a href="<?php echo get_category_link($two->term_id);?>" title="<?php echo $two->name;?>"><small><?php echo $two->name; ?></small></a>
 									<ul class="hide">
@@ -118,10 +119,11 @@
 										?>
 									</ul>
 								</li>
+								<?php }?>
+								</ul>
 								<?php
-								}
-								?>
-							</ul>
+							}
+							?>
 						</li>
 						<?php
 					}

@@ -1,22 +1,28 @@
+<div id="side-button">
+	<ul>
+		<li id="go-top" class="am-icon-btn am-icon-arrow-up"></li>
+		<li id="go-bottom" class="am-icon-btn am-icon-arrow-down"></li>
+		<!--侧滑评论所需开始-->
+		<?php if (comments_open()&&(is_single()||is_page())) : ?>
+		<li id="ex-comment" class="am-icon-btn am-icon-comments"></li>
+		<?php endif; ?>
+		<!--侧滑评论所需结束-->
+	</ul>
+</div>
 <!-- footer -->
 <footer class="am-footer am-footer-default">
-	<a style="position:fixed;right: 50px;bottom: 50px;" href="#top" title="回到顶部" class="am-icon-btn am-icon-arrow-up" id="amz-go-top"></a>
 	<div class="am-footer-miscs ">
 		<?=printLinks();?>
-    </div>
-    <div class="am-footer-miscs ">
-        <p>
-			CopyRight©2018 <a href="<?php bloginfo('url'); ?>"><?=bloginfo('name');?></a>
-		</p>
     </div>
 	<div class="am-footer-miscs ">
 		<!--尊重以下网站版权是每一个合法公民应尽的义务，请不要去除以下版权。-->
 		<p>
-			Powered by <a href="https://cn.wordpress.org/" title="WordPress" target="_blank" rel="nofollow">WordPress</a> Theme By <a id="rightdetail" href="http://www.tongleer.com" title="同乐儿" target="_blank">同乐儿</a>
+			CopyRight©<?=date("Y");?> <a href="<?php bloginfo('url'); ?>"><?=bloginfo('name');?></a> Powered by <a href="https://cn.wordpress.org/" title="WordPress" target="_blank" rel="nofollow">WordPress</a> Theme By <a id="rightdetail" href="http://www.tongleer.com" title="同乐儿" target="_blank">Tongleer</a>
 		</p>
     </div>
 	<div style="display:none;"><?=do_option('config_foot_info');?></div>
 </footer>
+<?php wp_footer(); ?>
 <!--pjax刷新开始-->
 <?php if(do_option('config_is_pjax')=='y'){?>
 <style>
@@ -179,5 +185,48 @@ var musicList = [
 <script src="<?php echo get_template_directory_uri(); ?>/assets/js/amazeui.widgets.helper.min.js" type="text/javascript"></script>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/js/amazeui.min.js" type="text/javascript"></script>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/js/app.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/js/rightnav.js" type="text/javascript"></script>
+<input type="hidden" id="get_template_directory_uri" value="<?php echo get_template_directory_uri(); ?>" />
+<script>
+/*侧滑评论所需开始*/
+$(function() {
+	if(window.location.href.indexOf("#comment-")>-1) {
+		$("#post-comments").addClass("comment-open");
+	}
+	$("#ex-comment").click(function() {
+		$("#post-comments").toggleClass("comment-open");
+	});
+});
+/*侧滑评论所需结束*/
+/*goToTop*/
+$(function(){
+	$("#go-top").hide();
+	$(window).scroll(function(){
+		if($(this).scrollTop() > 100){
+			$('#go-top').fadeIn();
+		}else{
+			$('#go-top').fadeOut();
+		}
+	});
+	$('#go-top').click(function(){
+		$('html ,body').animate({scrollTop: 0}, 300);
+		return false;
+	});
+});
+/*goToBottom*/
+$(function(){
+	$(window).scroll(function(){
+		if($(this).scrollTop() > (document.body.scrollHeight - 1000)) {
+			$('#go-bottom').fadeOut();
+		}else{
+			$('#go-bottom').fadeIn();
+		}
+	});
+	$('#go-bottom').click(function(){
+		$('html ,body').animate({scrollTop: document.body.scrollHeight}, 300);
+		return false;
+	});
+});
+</script>
 </body>
 </html>

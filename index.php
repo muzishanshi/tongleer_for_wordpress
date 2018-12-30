@@ -100,11 +100,12 @@
 						-->
 						<li>
 							<a href="<?php echo get_category_link($category->term_id);?>" title="<?php echo $category->name;?>"><small><?php echo $category->name;?></small></a>
-							<ul class="two">
-								<?php
-								$twocate = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." AS t,".$wpdb->term_taxonomy." AS tt WHERE t.term_id=tt.term_id AND tt.taxonomy = 'category' AND parent=".$category->term_id);
-								foreach ($twocate as $two) {
+							<?php
+							$twocate = $wpdb->get_results("SELECT * FROM ".$wpdb->terms." AS t,".$wpdb->term_taxonomy." AS tt WHERE t.term_id=tt.term_id AND tt.taxonomy = 'category' AND parent=".$category->term_id);
+							if($twocate){
 								?>
+								<ul class="two">
+								<?php foreach ($twocate as $two) {?>
 								<li>
 									<a href="<?php echo get_category_link($two->term_id);?>" title="<?php echo $two->name;?>"><small><?php echo $two->name; ?></small></a>
 									<ul class="hide">
@@ -118,10 +119,11 @@
 										?>
 									</ul>
 								</li>
+								<?php }?>
+								</ul>
 								<?php
-								}
-								?>
-							</ul>
+							}
+							?>
 						</li>
 						<?php
 					}
@@ -224,7 +226,7 @@
 			</div>
 			<ul class="am-avg-sm-3" style="text-align:center;">
 			  <li style="border-right:1px solid #ddd;border-top:1px solid #ddd;">
-				<a class="am-list-item-text" href="">阅读 <?php tle_views(''); ?></a>
+				<a class="am-list-item-text" href="<?php the_permalink() ?>">阅读 <?php tle_views(''); ?></a>
 			  </li>
 			  <li style="border-right:1px solid #ddd;border-top:1px solid #ddd;">
 				<a class="am-list-item-text" href="<?php echo get_comments_link(); ?>#comments">
@@ -239,7 +241,6 @@
 		<?php tle_paging(); ?>
 		<?php if(do_option('config_is_ajax')=='y'){?>
 		<!--ajax分页加载-->
-		<script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.ias.min.js" type="text/javascript"></script>
 		<script>
 		var ias = $.ias({
 			container: "#content", /*包含所有文章的元素*/
@@ -248,12 +249,12 @@
 			next: ".am-pagination #tlenextpage a", /*下一页元素*/
 		});
 		ias.extension(new IASTriggerExtension({
-			text: '<div class="cat-nav am-round"><small>猛点几次查看更多内容</small></div>', /*此选项为需要点击时的文字*/
-			offset: 2, /*设置此项后，到 offset+1 页之后需要手动点击才能加载，取消此项则一直为无限加载*/
+			text: '<div class="cat-nav am-round"><small></small></div>', /*此选项为需要点击时的文字*/
+			offset: false, /*设置此项后，到 offset+1 页之后需要手动点击才能加载，取消此项则一直为无限加载*/
 		}));
 		ias.extension(new IASSpinnerExtension());
 		ias.extension(new IASNoneLeftExtension({
-			text: '<div class="cat-nav am-round"><small>已经是全部内容了</small></div>', /*加载完成时的提示*/
+			text: '<div class="cat-nav am-round"><small></small></div>', /*加载完成时的提示*/
 		}));
 		</script>
 		<?php }?>

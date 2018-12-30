@@ -114,14 +114,23 @@ function tle_strimwidth($str ,$start , $width ,$trimmarker ){
 }
 //输出友情链接
 function printLinks(){
+	?>
+	<style>
+	.friendlink{margin:0 auto;width:calc(100% - 100px);}
+	@media screen and (max-width:calc(100% - 100px);) {
+		.friendlink{width: calc(100% - 100px);}
+	}
+	</style>
+	<?php
 	global $wpdb;
 	$friendlinks='';
 	$rowsLinks = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."links WHERE link_visible='Y' AND link_rating!=0 order by link_rating,link_id,link_updated desc");
 	if(count($rowsLinks)>0){
-		$friendlinks.='友情链接：';
+		$friendlinks.='<div class="friendlink"><marquee direction="up" behavior="scroll" scrollamount="1" scrolldelay="10" loop="-1" onMouseOver="this.stop()" onMouseOut="this.start()" width="100%" height="30" style="text-align:center;">友情链接：';
 		foreach($rowsLinks as $value){
 			$friendlinks.='<a href="'.$value->link_url.'" target="'.$value->link_target.'" title="'.$value->link_description.'" rel="nofollow '.$value->link_rel.'">'.$value->link_name.'</a>&nbsp;';
 		}
+		$friendlinks.='</marquee></div>';
 	}
 	echo $friendlinks;
 }
@@ -267,120 +276,49 @@ function isMobile(){
     } 
     return false;
 }
-
-//评论样式
-function tle_comment_list($comment, $args, $depth) {
-	if($comment->comment_parent==0){
-		?>
-		<li class="am-comment">
-			<a href="javascript:;" style="float:left;">
-				<?php
-				$host = 'https://secure.gravatar.com';
-				$url = '/avatar/';
-				$size = '50';
-				$rating = 'g';
-				$hash = md5(strtolower($comment->comment_author_email));
-				$avatar = $host . $url . $hash . '?s=' . $size . '&r=' . $rating . '&d=mm';
-				?>
-				<?php //echo str_replace(' src=', ' data-original=', get_avatar( $comment->comment_author_email, $size = '36'));?>
-				<img src="<?=$avatar;?>" alt="" />
-			</a>
-			<div class="am-comment-main">
-			  <header class="am-comment-hd">
-				<div class="am-comment-meta">
-				  <?=$comment->comment_author;?><time datetime="<?=$comment->comment_date;?>" title="<?=$comment->comment_date;?>"><?=$comment->comment_date;?></time>评论
-				  <div class="am-fr">
-					<a href="javascript:;" class="replyfloor" id="replyfloor<?=get_comment_ID();?>" data-coid="<?php echo get_comment_ID(); ?>" data-author="<?=$comment->comment_author;?>" data-ccreated="<?=$comment->comment_date;?>" data-ctext="<?php echo htmlspecialchars(strip_tags($comment->comment_content)); ?>">回复</a>
-					此楼
-				  </div>
-				</div>
-			  </header>
-			  <div class="am-comment-bd">
-				<p><?=$comment->comment_content;?></p>
-				<?php
-				global $wpdb,$current_user;
-				$rows = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".get_comment_ID()." AND comment_approved='1' ORDER BY comment_date DESC");
-				foreach($rows as $value){
-				?>
-				<header class="am-comment-hd" style="padding:10px;">
-					
-					<div class="am-comment-meta">
-					  <a href="#link-to-user" class="am-comment-author"><?php echo $value->comment_author; ?></a><time datetime="<?php echo $value->comment_date; ?>" title="<?php echo $value->comment_date; ?>"><?php echo $value->comment_date; ?></time>评论
-					  <div class="am-fr">
-							<a href="javascript:;" class="replyfloor2" id="replyfloor2<?php echo $value->comment_ID; ?>" data-coid="<?php echo $value->comment_ID; ?>" data-author="<?=$comment->comment_author;?>" data-ccreated="<?=$comment->comment_date;?>" data-ctext="<?php echo htmlspecialchars(strip_tags($comment->comment_content)); ?>">回复</a>
-							此楼
-					  </div>
-					</div>
-				</header>
-				<div class="am-comment-bd" style="border:1px solid #eee;">
-					<p><?php echo $value->comment_content; ?></p>
-					<?php
-					$rows2 = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".$value->comment_ID." AND comment_approved='1' ORDER BY comment_date DESC");
-					foreach($rows2 as $value2){
-						?>
-						<header class="am-comment-hd" style="padding:10px;">
-							
-							<div class="am-comment-meta">
-							  <a href="#link-to-user" class="am-comment-author"><?php echo $value2->comment_author; ?></a><time datetime="<?php echo $value2->comment_date; ?>" title="<?php echo $value2->comment_date; ?>"><?php echo $value2->comment_date; ?></time>评论
-							  <div class="am-fr">
-									<a href="javascript:;" class="replyfloor3" id="replyfloor3<?php echo $value2->comment_ID; ?>" data-coid="<?php echo $value2->comment_ID; ?>" data-author="<?=$comment->comment_author;?>" data-ccreated="<?=$comment->comment_date;?>" data-ctext="<?php echo htmlspecialchars(strip_tags($comment->comment_content)); ?>">回复</a>
-									此楼
-							  </div>
-							</div>
-							
-						</header>
-						<div class="am-comment-bd" style="border:1px solid #eee;">
-							<p><?php echo $value2->comment_content; ?></p>
-							<?php
-							$rows3 = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".$value2->comment_ID." AND comment_approved='1' ORDER BY comment_date DESC");
-							foreach($rows3 as $value3){
-							?>
-							<header class="am-comment-hd" style="padding:10px;">
-								
-								<div class="am-comment-meta">
-								  <a href="#link-to-user" class="am-comment-author"><?php echo $value3->comment_author; ?></a><time datetime="<?php echo $value3->comment_date; ?>" title="<?php echo $value3->comment_date; ?>"><?php echo $value3->comment_date; ?></time>评论
-								  <div class="am-fr">
-										<a href="javascript:;" class="replyfloor4" id="replyfloor4<?php echo $value3->comment_ID; ?>" data-coid="<?php echo $value3->comment_ID; ?>" data-author="<?=$comment->comment_author;?>" data-ccreated="<?=$comment->comment_date;?>" data-ctext="<?php echo htmlspecialchars(strip_tags($comment->comment_content)); ?>">回复</a>
-										此楼
-								  </div>
-								</div>
-								
-							</header>
-							<div class="am-comment-bd" style="border:1px solid #eee;">
-								<p><?php echo $value3->comment_content; ?></p>
-								<?php
-								$rows4 = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."comments WHERE comment_parent=".$value3->comment_ID." AND comment_approved='1' ORDER BY comment_date DESC");
-								foreach($rows4 as $value4){
-								?>
-								<header class="am-comment-hd" style="padding:10px;">
-									
-									<div class="am-comment-meta">
-									  <a href="#link-to-user" class="am-comment-author"><?php echo $value4->comment_author; ?></a><time datetime="<?php echo $value4->comment_date; ?>" title="<?php echo $value4->comment_date; ?>"><?php echo $value4->comment_date; ?></time>评论
-									</div>
-									
-								</header>
-								<div class="am-comment-bd" style="border:1px solid #eee;">
-									<p><?php echo $value4->comment_content; ?></p>
-								</div>
-								<?php
-								}
-								?>
-							</div>
-							<?php
-							}
-							?>
-						</div>
-						<?php
-					}
-					?>
-				</div>
-				<?php
-				}
-				?>
-			  </div>
-			</div>
-		</li>
-		<?php
-	}
+//隐藏admin Bar
+add_filter('show_admin_bar','hide_admin_bar');
+/*侧滑评论开始*/
+//自动勾选 
+function tle_add_checkbox() {
+  echo '<label for="comment_mail_notify" class="checkbox inline" style="padding-top:0"><input type="checkbox" name="comment_mail_notify" id="comment_mail_notify" value="comment_mail_notify" checked="checked"/>有人回复时邮件通知我</label>';
 }
+//时间显示方式‘xx以前’
+function time_ago( $type = 'commennt', $day = 7 ) {
+  $d = $type == 'post' ? 'get_post_time' : 'get_comment_time';
+  if (time() - $d('U') > 60*60*24*$day) return;
+  echo ' (', human_time_diff($d('U'), strtotime(current_time('mysql', 0))), '前)';
+}
+function tle_comment_list($comment, $args, $depth) {
+  echo '<li '; comment_class(); echo ' id="comment-'.get_comment_ID().'">';
+
+  //头像
+  $host = 'https://secure.gravatar.com';
+  $url = '/avatar/';
+  $size = '50';
+  $rating = 'g';
+  $hash = md5(strtolower($comment->comment_author_email));
+  $avatar = $host . $url . $hash . '?s=' . $size . '&r=' . $rating . '&d=mm';
+  echo '<div class="c-avatar">';
+  //echo str_replace(' src=', ' data-original=', get_avatar( $comment->comment_author_email, $size = '36' , $avatar)); 
+  echo '<img src="'.$avatar.'" />';
+  echo '</div>';
+  //内容
+  echo '<div class="c-main" id="div-comment-'.get_comment_ID().'">';
+	echo str_replace(' src=', ' data-original=', convert_smilies(get_comment_text()));
+	if ($comment->comment_approved == '0'){
+	  echo '<span class="c-approved">您的评论正在排队审核中，请稍后！</span><br />';
+	}
+	//信息
+	echo '<div class="c-meta">';
+		echo '<span class="c-author">'.get_comment_author_link().'</span>';
+		echo get_comment_time('Y-m-d H:i '); echo time_ago(); 
+		if ($comment->comment_approved !== '0'){ 
+			echo comment_reply_link( array_merge( $args, array('add_below' => 'div-comment', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); 
+		echo edit_comment_link(__('(编辑)'),' - ','');
+		} 
+	echo '</div>';
+  echo '</div>';
+}
+/*侧滑评论结束*/
 ?>

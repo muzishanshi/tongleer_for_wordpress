@@ -67,6 +67,7 @@
 	<meta name="keywords" content="<?php echo $keywords; ?>" />
 	<meta name="description" content="<?php echo $description; ?>" />
 	<link rel="stylesheet" type="text/css" media="all" href="<?php echo get_template_directory_uri(); ?>/assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="<?php echo get_template_directory_uri(); ?>/style.css" />
 	<link rel="alternate icon" href="<?=do_option('config_favicon');?>" type="image/png" />
 	<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/amazeui.min.css"/>
 	<!--[if lt IE 9]>-->
@@ -76,6 +77,7 @@
 	<script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.min.js"></script>
 	<!--<![endif]-->
 	<link href="<?php bloginfo('template_url'); ?>/highlight.css" rel="Stylesheet" type="text/css" />
+	<script src="<?php echo get_template_directory_uri(); ?>/assets/js/jquery.ias.min.js" type="text/javascript"></script>
 	<?php wp_head(); ?>
 </head>
 <body style="background-image: url('<?=do_option('config_bg');?>');">
