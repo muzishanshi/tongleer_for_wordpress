@@ -6,7 +6,8 @@ $options = array(
 	"config_headBg","config_headImgUrl","config_nickname","config_follow_links","config_fans_readers","config_follow_qrcode","config_home_name",
 	"config_home_link","config_album_name","config_album_link","config_other_1_name","config_other_1_link",
 	"config_weiboname","config_address","config_birthday","config_detail","config_foot_info",
-	"config_login","config_sex","config_about","config_is_ajax","config_is_pjax","config_is_play"
+	"config_login","config_sex","config_about","config_is_ajax","config_is_pjax","config_is_play",
+	"config_is_play_auto","config_is_play_defaultMode","config_playjson",
 );
 
 function mytheme_add_admin() {
@@ -28,7 +29,7 @@ function mytheme_admin() {
     $i=0;
     if ( $_REQUEST['saved'] ) echo '<div><p>'.$themename.'修改已保存</p></div>';
 	//版本检查
-	$version=file_get_contents('https://tongleer.com/api/interface/tongleer.php?action=updateWordPress&version=5');
+	$version=file_get_contents('https://tongleer.com/api/interface/tongleer.php?action=updateWordPress&version=6');
 ?>
 <style>
 table td,th{background-color:#fff;}
@@ -74,7 +75,6 @@ table td,th{background-color:#fff;}
 					<td>
 						<input type="radio" id="config_is_pjax" name="config_is_pjax" value="y" <?php if(do_option('config_is_pjax')=='y'){?>checked<?php }?>>是
 						<input type="radio" id="config_is_pjax" name="config_is_pjax" value="n" <?php if(do_option('config_is_pjax')=='n'){?>checked<?php }?>>否
-						（此功能尚未完善）
 					</td>
 				</tr>
 				<tr>
@@ -82,7 +82,6 @@ table td,th{background-color:#fff;}
 					<td>
 						<input type="radio" id="config_is_play" name="config_is_play" value="y" <?php if(do_option('config_is_play')=='y'){?>checked<?php }?>>是
 						<input type="radio" id="config_is_play" name="config_is_play" value="n" <?php if(do_option('config_is_play')=='n'){?>checked<?php }?>>否
-						（此功能设置歌单需要手动修改footer.php文件）
 					</td>
 				</tr>
 				<tr>
@@ -90,6 +89,77 @@ table td,th{background-color:#fff;}
 					<td>
 						<input type="radio" id="config_is_ajax" name="config_is_ajax" value="y" <?php if(do_option('config_is_ajax')=='y'){?>checked<?php }?>>是
 						<input type="radio" id="config_is_ajax" name="config_is_ajax" value="n" <?php if(do_option('config_is_ajax')=='n'){?>checked<?php }?>>否
+					</td>
+				</tr>
+				<tr>
+					<td>是否自动播放</td>
+					<td>
+						<input type="radio" id="config_is_play_auto" name="config_is_play_auto" value="true" <?php if(do_option('config_is_play_auto')=='true'){?>checked<?php }?>>自动
+						<input type="radio" id="config_is_play_auto" name="config_is_play_auto" value="false" <?php if(do_option('config_is_play_auto')=='false'){?>checked<?php }?>>手动
+					</td>
+				</tr>
+				<tr>
+					<td>播放模式</td>
+					<td>
+						<input type="radio" id="config_is_play_defaultMode" name="config_is_play_defaultMode" value="1" <?php if(do_option('config_is_play_defaultMode')=='1'){?>checked<?php }?>>列表循环
+						<input type="radio" id="config_is_play_defaultMode" name="config_is_play_defaultMode" value="2" <?php if(do_option('config_is_play_defaultMode')=='2'){?>checked<?php }?>>随机播放
+						<input type="radio" id="config_is_play_defaultMode" name="config_is_play_defaultMode" value="3" <?php if(do_option('config_is_play_defaultMode')=='3'){?>checked<?php }?>>单曲循环
+					</td>
+				</tr>
+				<tr>
+					<td>播放器音乐数据</td>
+					<td>
+						<?php
+						$config_playjson=do_option('config_playjson');
+						if($config_playjson==''){
+							$config_playjson='
+								[{
+									"title":"花下舞剑",
+									"singer":"童可可",
+									"cover":"https://img3.kuwo.cn/star/albumcover/240/49/7/2753401394.jpg",
+									"src":"http://other.web.rf01.sycdn.kuwo.cn/resource/n1/84/87/3802376964.mp3",
+									"lyric":"'.get_bloginfo('template_url').'/assets/smusic/data/tongkeke-huaxiawujian.lrc"
+								},{
+									"title":"萌二代",
+									"singer":"童可可",
+									"cover":"https://img3.kuwo.cn/star/albumcover/240/35/65/238194684.jpg",
+									"src":"http://other.web.rg01.sycdn.kuwo.cn/resource/n3/21/49/2096701565.mp3",
+									"lyric":"'.$row["value"].'/assets/smusic/data/tongkeke-mengerdai.lrc"
+								},{
+									"title":"吃货进行曲",
+									"singer":"童可可",
+									"cover":"https://img3.kuwo.cn/star/albumcover/240/26/34/1695727344.jpg",
+									"src":"http://other.web.rh01.sycdn.kuwo.cn/resource/n3/15/72/1780780959.mp3",
+									"lyric":"'.$row["value"].'/assets/smusic/data/tongkeke-chihuojinxingqu.lrc"
+								},{
+									"title":"小秘密",
+									"singer":"童可可",
+									"cover":"https://img3.kuwo.cn/star/albumcover/240/55/73/500614479.jpg",
+									"src":"http://other.web.rh01.sycdn.kuwo.cn/resource/n1/74/68/3330561514.mp3",
+									"lyric":"'.$row["value"].'/assets/smusic/data/tongkeke-xiaomimi.lrc"
+								},{
+									"title":"听你爱听的歌",
+									"singer":"童可可",
+									"cover":"https://img1.kuwo.cn/star/starheads/240/16/85/44330486.jpg",
+									"src":"http://other.web.rh01.sycdn.kuwo.cn/resource/n2/80/39/46671518.mp3",
+									"lyric":"'.$row["value"].'/assets/smusic/data/tongkeke-tingniaitingdege.lrc"
+								},{
+									"title":"别让我放不下",
+									"singer":"童可可",
+									"cover":"https://img1.kuwo.cn/star/albumcover/240/9/59/996272309.jpg",
+									"src":"http://other.web.rh01.sycdn.kuwo.cn/resource/n1/15/60/2541949312.mp3",
+									"lyric":"'.$row["value"].'/assets/smusic/data/tongkeke-bierangwofangbuxia.lrc"
+								},{
+									"title":"非主恋",
+									"singer":"童可可",
+									"cover":"https://img4.kuwo.cn/star/albumcover/240/21/10/339989310.jpg",
+									"src":"http://other.web.rh01.sycdn.kuwo.cn/resource/n2/34/93/1218459911.mp3",
+									"lyric":"'.$row["value"].'/assets/smusic/data/tongkeke-feizhulian.lrc"
+								}]
+							';
+						}
+						?>
+						<textarea name="config_playjson" id="config_playjson" placeholder="" rows="10" cols="100"><?=$config_playjson;?></textarea><br /><small>自定义歌单需要至少2首，可到<a href="http://api.tongleer.com/music/" target="_blank">http://api.tongleer.com/music/</a>下载歌曲，专辑图片网络有现成的就用现成的，没有就上传微博图床后设置到此处，歌词文件一般酷狗、酷我等软件即可生成。</small>
 					</td>
 				</tr>
 				<tr>

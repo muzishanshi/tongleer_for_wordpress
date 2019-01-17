@@ -18,6 +18,7 @@ date_default_timezone_set(PRC);
 $closeTimer = (strtotime(date('Y-m-d G:i:s'))-strtotime(get_the_time('Y-m-d G:i:s')))/86400;
 ?>
 <div id="post-comments" style="font-size:12px"><!--侧滑评论所需ID-->
+<input type="hidden" id="exist-comment" value="<?=comments_open()&&(is_single()||is_page());?>" />
 <?php 
 if ( have_comments() ) { 
 ?>
