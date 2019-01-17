@@ -136,7 +136,7 @@
 				echo '
 					<div class="am-topbar-right">
 						<div class="am-topbar-btn">
-							<span class="am-icon-user"></span><a href="'.site_url('/wp-admin').'">'.$u_name.'</a>
+							<span class="am-icon-user"></span><a href="'.site_url('/wp-admin').'" target="_blank">'.$u_name.'</a>
 						</div>
 					</div>
 				';

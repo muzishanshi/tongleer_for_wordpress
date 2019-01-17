@@ -32,8 +32,9 @@
 <script src="https://cdn.bootcss.com/jquery.pjax/1.9.5/jquery.pjax.min.js"></script>
 <script type="text/javascript" language="javascript">
 $(function() {
+	ajaxComment();
 	$(document).pjax('a[target!=_blank]', '#content', {fragment:'#content', timeout:6000});
-	$(document).on('submit', 'form[id!=loginForm][id!=comment-form][id!=reply-form]', function (event) {
+	$(document).on('submit', 'form', function (event) {
 		$.pjax.submit(event, '#content', {fragment:'#content', timeout:6000});
 	});
 	$(document).on('pjax:send', function() {
@@ -44,19 +45,33 @@ $(function() {
 		$("#side-button ul #ex-comment").remove();
 		if($("#exist-comment").val()){
 			$("#side-button ul").append('<li id="ex-comment" class="am-icon-btn am-icon-comments"></li>');
-			if(window.location.href.indexOf("#comment-")>-1) {
+			if(window.location.href.indexOf("wp-comments-post")>-1) {
 				$("#post-comments").addClass("comment-open");
 			}
 			$("#ex-comment").click(function() {
 				$("#post-comments").toggleClass("comment-open");
 			});
 		}
+		ajaxComment();
 		if(window.location.href.indexOf("comment")!=-1){
 			$("#submit").attr("type","button");
 			$("#submit").text("点击让浏览器后退后继续评论");
 			$("#submit").attr("onClick","window.history.go(-1);");
 		}
 	});
+	function ajaxComment(){
+		$("#commentform").submit(function(){
+			if(!$("#is_user_logged_in").val()){
+				$("#commentform #submit").html("需要登陆后评论");
+				return false;
+			}else{
+				if($("#comment").val()==""){
+					$("#commentAlert").html("昵称和邮箱不能为空");
+					return false;
+				}
+			}
+		});
+	}
 });
 </script>
 <div class="pjax_loading"></div>
@@ -149,7 +164,7 @@ function doAct(){
 <script>
 /*侧滑评论所需开始*/
 $(function() {
-	if(window.location.href.indexOf("#comment-")>-1) {
+	if(window.location.href.indexOf("wp-comments-post")>-1) {
 		$("#post-comments").addClass("comment-open");
 	}
 	$("#ex-comment").click(function() {

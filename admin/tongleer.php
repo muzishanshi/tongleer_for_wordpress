@@ -75,6 +75,7 @@ table td,th{background-color:#fff;}
 					<td>
 						<input type="radio" id="config_is_pjax" name="config_is_pjax" value="y" <?php if(do_option('config_is_pjax')=='y'){?>checked<?php }?>>是
 						<input type="radio" id="config_is_pjax" name="config_is_pjax" value="n" <?php if(do_option('config_is_pjax')=='n'){?>checked<?php }?>>否
+						（支持pjax评论，但只能评论完一次后返回再继续评论，并且暂时不支持未登陆评论。）
 					</td>
 				</tr>
 				<tr>
@@ -88,7 +89,7 @@ table td,th{background-color:#fff;}
 					<td>是否开启AJAX分页加载</td>
 					<td>
 						<input type="radio" id="config_is_ajax" name="config_is_ajax" value="y" <?php if(do_option('config_is_ajax')=='y'){?>checked<?php }?>>是
-						<input type="radio" id="config_is_ajax" name="config_is_ajax" value="n" <?php if(do_option('config_is_ajax')=='n'){?>checked<?php }?>>否
+						<input type="radio" id="config_is_ajax" name="config_is_ajax" value="n" <?php if(do_option('config_is_ajax')=='n'){?>checked<?php }?>>否（暂时与图片放大功能不兼容）
 					</td>
 				</tr>
 				<tr>
