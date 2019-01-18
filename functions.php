@@ -277,7 +277,7 @@ function isMobile(){
     return false;
 }
 //隐藏admin Bar
-add_filter('show_admin_bar','hide_admin_bar');
+add_filter('show_admin_bar','__return_false');
 /*侧滑评论开始*/
 //自动勾选 
 function tle_add_checkbox() {
