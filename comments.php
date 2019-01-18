@@ -106,24 +106,26 @@ if ( have_comments() ) {
 		
 		<div class="comt">
 			<div class="comt-box">
-				<textarea placeholder="写点什么..." class="input-block-level comt-area" name="comment" id="comment" cols="100%" rows="3" tabindex="1" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();return false};"></textarea>
+				<textarea placeholder="写点什么..." required class="input-block-level comt-area" name="comment" id="comment" cols="100%" rows="3" tabindex="1" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();return false};"></textarea>
 				<div class="comt-ctrl">
 					<input type="hidden" id="is_user_logged_in" value="<?=is_user_logged_in();?>" />
 					<button class="btn btn-primary pull-right" type="submit" name="submit" id="submit" tabindex="5"><i class="icon-ok-circle icon-white icon12"></i> 提交评论</button>
 					<font color="red"><span id="commentAlert"></span></font>
 					<div class="comt-tips pull-right"><?php comment_id_fields(); do_action('comment_form', $post->ID); ?></div>
+					<?php if(do_option('config_is_pjax')=='n'){?>
 					<span data-type="comment-insert-smilie" class="muted comt-smilie"><i class="icon-thumbs-up icon12"></i> 表情</span>
+					<?php }?>
 					<span class="muted comt-mailme"><?php tle_add_checkbox() ?></span>
 				</div>
 			</div>
 
 			<?php if ( !is_user_logged_in() ) { ?>
 				<?php if( get_option('require_name_email') ){ ?>
-					<div class="comt-comterinfo" id="comment-author-info" <?php if ( !empty($comment_author) ) echo 'style="display:none"'; ?>>
+					<div class="comt-comterinfo-show" id="comment-author-info" <?php if ( !empty($comment_author) ) echo 'style="display:none"'; ?>>
 						<ul>
-							<li class="form-inline"><label class="hide" for="author">昵称</label><input class="ipt" type="text" name="author" id="author" value="<?php echo esc_attr($comment_author); ?>" tabindex="2" placeholder="昵称"><span class="help-inline">昵称 (必填)</span></li>
-							<li class="form-inline"><label class="hide" for="email">邮箱</label><input class="ipt" type="text" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" tabindex="3" placeholder="邮箱"><span class="help-inline">邮箱 (必填)</span></li>
-							<li class="form-inline"><label class="hide" for="url">网址</label><input class="ipt" type="text" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" tabindex="4" placeholder="网址"><span class="help-inline">网址</span></li>
+							<li class="form-inline"><label class="hide" for="author">昵称</label><input class="ipt" type="text" name="author" id="author" value="<?php echo esc_attr($comment_author); ?>" tabindex="2" placeholder="昵称 (必填)" required></li>
+							<li class="form-inline"><label class="hide" for="email">邮箱</label><input class="ipt" type="text" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" tabindex="3" placeholder="邮箱 (必填)" required></li>
+							<li class="form-inline"><label class="hide" for="url">网址</label><input class="ipt" type="text" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" tabindex="4" placeholder="网址">
 						</ul>
 					</div>
 				<?php } ?>

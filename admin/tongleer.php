@@ -75,7 +75,7 @@ table td,th{background-color:#fff;}
 					<td>
 						<input type="radio" id="config_is_pjax" name="config_is_pjax" value="y" <?php if(do_option('config_is_pjax')=='y'){?>checked<?php }?>>是
 						<input type="radio" id="config_is_pjax" name="config_is_pjax" value="n" <?php if(do_option('config_is_pjax')=='n'){?>checked<?php }?>>否
-						（支持pjax评论，但只能评论完一次后返回再继续评论，并且暂时不支持未登陆评论。）
+						（支持pjax评论，但只能评论完一次后返回再继续评论，并且启用后暂不支持发表表情。）
 					</td>
 				</tr>
 				<tr>

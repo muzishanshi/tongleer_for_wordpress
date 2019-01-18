@@ -32,7 +32,6 @@
 <script src="https://cdn.bootcss.com/jquery.pjax/1.9.5/jquery.pjax.min.js"></script>
 <script type="text/javascript" language="javascript">
 $(function() {
-	ajaxComment();
 	$(document).pjax('a[target!=_blank]', '#content', {fragment:'#content', timeout:6000});
 	$(document).on('submit', 'form', function (event) {
 		$.pjax.submit(event, '#content', {fragment:'#content', timeout:6000});
@@ -52,26 +51,12 @@ $(function() {
 				$("#post-comments").toggleClass("comment-open");
 			});
 		}
-		ajaxComment();
 		if(window.location.href.indexOf("comment")!=-1){
 			$("#submit").attr("type","button");
-			$("#submit").text("点击让浏览器后退后继续评论");
+			$("#submit").text("评论结束点击返回后可继续评论");
 			$("#submit").attr("onClick","window.history.go(-1);");
 		}
 	});
-	function ajaxComment(){
-		$("#commentform").submit(function(){
-			if(!$("#is_user_logged_in").val()){
-				$("#commentform #submit").html("需要登陆后评论");
-				return false;
-			}else{
-				if($("#comment").val()==""){
-					$("#commentAlert").html("昵称和邮箱不能为空");
-					return false;
-				}
-			}
-		});
-	}
 });
 </script>
 <div class="pjax_loading"></div>
