@@ -28,18 +28,24 @@ function mytheme_admin() {
     global $themename, $options;
     $i=0;
     if ( $_REQUEST['saved'] ) echo '<div><p>'.$themename.'修改已保存</p></div>';
-	//版本检查
-	$version=file_get_contents('https://www.tongleer.com/api/interface/tongleer.php?action=updateWordPress&version=6');
 ?>
 <style>
 table td,th{background-color:#fff;}
 </style>
+<script src="https://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script>
+$(function(){
+	$.post("<?php bloginfo('template_url'); ?>/ajax/update.php",{action:"update",version:6},function(data){
+		$("#versionCode").html(data);
+	});
+});
+</script>
 <div>
     <h2><?php echo $themename; ?>设置</h2>
 	<p>
 		<small>
 		作者：<a href="http://www.tongleer.com/" target="_blank">二呆</a><br />
-		版本检测：<?=$version;?>
+		版本检测：<span id="versionCode"></span>
 		</small>
 	</p>
 

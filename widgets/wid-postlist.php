@@ -18,7 +18,7 @@ class tle_postlist extends WP_Widget {
 		$orderby      = $instance['orderby'];
 		
 		$args = array(
-			'order'            => DESC,
+			'order'            => "DESC",
 			'orderby'          => $orderby,
 			'showposts'        => 5,
 			'caller_get_posts' => 1
