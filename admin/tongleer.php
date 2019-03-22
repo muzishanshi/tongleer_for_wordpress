@@ -35,7 +35,7 @@ table td,th{background-color:#fff;}
 <script src="https://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
 <script>
 $(function(){
-	$.post("<?php bloginfo('template_url'); ?>/ajax/update.php",{action:"update",version:6},function(data){
+	$.post("<?php bloginfo('template_url'); ?>/ajax/update.php",{action:"update",version:7},function(data){
 		$("#versionCode").html(data);
 	});
 });
