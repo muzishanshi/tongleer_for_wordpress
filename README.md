@@ -39,6 +39,10 @@ http://www.tongleer.com
  - 1元入群：http://joke.tongleer.com/328.html
 
 # 版本记录
+2019-10-02 1.0.8
+
+	修复因加载cloudflare的layer.js失效导致的bug。
+
 2019-03-22 1.0.3
 
 	修复了因cdn.bootcss.com中JS静态资源不可访问导致的js失效的问题。
